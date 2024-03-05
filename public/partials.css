@@ -1,0 +1,178 @@
+/* TOPBAR */
+.topbar {
+	position: relative;
+	display: flex;
+	height: 100px;
+	justify-content: center;
+	padding: 0.5rem;
+	width: 100%;
+	z-index: 1;
+
+	& > .title {
+		margin: 0 auto;
+		padding: 0 2.5rem;
+	}
+
+	& > .crew, & > .player {
+		width: 18rem;
+	}
+
+	& > .player {
+		display: flex;
+		align-items: start;
+
+		& > .avatar {
+			border: 2px solid var(--cloth);
+			border-radius: 5px 0 0 5px;
+			box-sizing: border-box;
+			width: 4rem;
+		}
+
+		& > .info {
+			padding: 0.5rem 0.75rem 0.25rem;
+		}
+
+		& span {
+			color: var(--amber);
+		}
+	}
+}
+
+#view {
+	margin: 3rem 3rem 2rem 3rem;
+}
+
+/* MAIN MENU */
+.pillar {
+	position: absolute;
+	width: 1.5rem;
+	height: calc(100% + 7.5rem);
+	left: calc(50% - 0.75rem);
+	top: -5rem;
+}
+
+.main-menu {
+	display: flex;
+	flex-direction: column;
+	gap: 2.5rem;
+	position: relative;
+	padding-top: 2rem;
+	margin-left: 2rem;
+	width: 21rem;
+
+	& > .menu-item {
+		width: 18rem;
+		height: 4rem;
+	}
+
+	& > .menu-item:nth-child(even) {
+		margin-left: auto;
+	}
+}
+
+/* CREW LIST */
+.tavern-list {
+	display: flex;
+	flex-direction: column;
+	gap: 0.75rem;
+
+	& > .list-element {
+		min-height: 7rem;
+
+		& > .left, & > .right {
+			background-color: #8D6346AA;
+			display: flex;
+			flex-direction: column;
+			justify-content: space-between;
+			margin: 0.25rem 0;
+			padding: 0.75rem 1rem;
+		}
+
+		& > .left {
+			min-width: 12rem;
+		}
+
+		& > .separator {
+			width: 1.5rem;
+		}
+
+		& > .right {
+			flex-grow: 1;
+			border-radius: 0.25rem 0.25rem 5rem 0.25rem;
+
+			& > .avatars {
+				display: flex;
+				gap: 1rem;
+
+				& > .avatar {
+					background-size: cover;
+					border: 2px solid var(--amber);
+					border-radius: 100%;
+					box-sizing: border-box;
+					width: 3rem;
+				}
+			}
+		}
+	}
+
+	& span {
+		font-size: 1.2rem;
+		line-height: 1.2em;
+	}
+}
+
+/* CREW LOBBY */
+.crew-lobby {
+
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+
+	& button.add {
+		font-size: 4rem;
+		line-height: 1em;
+		width: 4rem;
+	}
+
+	.player-list {
+		display: flex;
+		flex-direction: column;
+		gap: 0.5rem;
+		/* width: 30rem; */
+	
+		& > .list-element {
+			min-height: 4.5rem;
+	
+			& > .avatar, & > .player-info {
+				margin: 0.25rem 0;
+			}
+	
+			& > .avatar {
+				border: solid var(--wood);
+				border-radius: 5px 0 0 5px;
+				border-width: 2px 0 2px 2px;
+				flex-shrink: 0;
+				width: 4rem;
+			}
+	
+			/* TODO: this is duplicated */
+			& > .separator {
+				flex-shrink: 0;
+				min-height: 100%;
+				width: 1.5rem;
+			}
+	
+			& > .player-info {
+				align-items: center;
+				border-radius: 0 5px 5px 0;
+				display: flex;
+				padding-left: 1rem;
+				min-width: 25rem;
+			}
+		}
+	
+		& span {
+			font-size: 1.4rem;
+		}
+	}
+}

@@ -1,0 +1,146 @@
+:root {
+	--amber: #D88B46;
+	--cloth: #FFE99D;
+	--darkwood: #834848;
+	--gold: #FFD543;
+	--grey: #444;
+	--wood: #8D6346;
+
+	color: var(--cloth);
+	font-family: "Default";
+	font-size: 20px;
+}
+
+@font-face {
+  font-family: "PirataOne";
+  src: local("PirataOne"), url(./fonts/PirataOne/PirataOne-Regular.ttf) format("truetype");
+}
+
+@font-face {
+  font-family: "Default";
+  src: local("Besley"), url(./fonts/Besley/Besley-VariableFont_wght.ttf) format("truetype");
+}
+
+body {
+  background: linear-gradient(134.38deg, #5448C8 11.84%, #60B2E5 87.42%);
+  height: 100dvh;
+  margin: 0;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	font-family: "PirataOne";
+	font-weight: 400;
+	margin: 0;
+}
+
+h1 {
+	font-size: 2.4rem;
+}
+
+h2 {
+	font-size: 2rem;
+}
+
+button {
+	border: none;
+	color: var(--cloth);
+	cursor: pointer;
+	font-family: "PirataOne";
+}
+
+.capitalize::first-letter {
+	text-transform:capitalize;
+}
+
+.bg-amber {
+	background-color: var(--amber);
+}
+
+.menu-item,
+.bg-cloth {
+	background-color: var(--cloth);
+}
+
+.bg-darkwood {
+	background-color: var(--darkwood);
+}
+
+.bg-grey {
+	background-color: var(--grey);
+}
+
+.bg-wood {
+	background-color: var(--wood);
+}
+
+.menu-item,
+.txt-amber {
+	color: var(--amber)
+}
+
+.menu-item,
+.rounded { border-radius: 0.25rem; }
+
+.menu-item,
+.shade-b {
+	box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+.menu-item,
+.flex-center {
+	align-items: center;
+	display: flex;
+	justify-content: center;
+}
+
+.border-box {
+	box-sizing: border-box;
+}
+
+.h-100p {
+	height: 100%;
+}
+
+/* Common */
+.menu-item {
+	z-index: 1;
+}
+
+.menu-item:hover {
+	/* background-color: var(--gold); */
+	cursor: pointer;
+	text-decoration: #5448C8 wavy underline;
+}
+
+.avatar {
+	aspect-ratio: 1;
+	background-size: cover;
+	background-position: center;
+}
+
+/* GENERIC LIST */
+.list {
+	& > .list-element {
+		display: flex;
+	}
+
+	& .separator {
+		min-height: 100%;
+	}
+}
+
+/* BOTTOM-RIGHT BUTTONS */
+.br-buttons {
+	position: absolute;
+	bottom: 2rem;
+	right: 3rem;
+
+	display: flex;
+	gap: 2rem;
+
+	& > button {
+		font-size: 1.8rem;
+		line-height: 1em;
+		padding: 0.75rem 3rem;
+	}
+}

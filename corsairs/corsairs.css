@@ -1,0 +1,30 @@
+#game-wrapper {
+  position: absolute;
+  overflow: hidden;
+  width: 100%;
+  height: 100dvh;
+  /* */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#game-wrapper canvas {
+   background: linear-gradient(134.38deg, #5448C8 11.84%, #60B2E5 87.42%);
+   z-index: 667;
+}
+
+#game-wrapper .game-overlay {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 75%);
+  z-index: 666;
+}
+
+@media screen and (max-width: 767px) {
+	#game-wrapper {
+		flex-direction: column;
+		justify-content: start;
+	}
+}
