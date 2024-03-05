@@ -5,6 +5,7 @@
 		hx-trigger="crew-change from:body" 
 		hx-post="/htmx/crew-change"
 		hx-vals='{"type": "crew", "crewId": <%= crew.id %>}'
+		hx-swap="innerHTML"
 	>
 		<%- include("./crew-list", {crew}) %>
 	</div>

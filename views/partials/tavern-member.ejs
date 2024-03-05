@@ -21,6 +21,7 @@
 						hx-post="/htmx/crew-join" 
 						hx-target="#view" 
 						hx-vals='{"crewId": <%= crew.id %>, "slotId": <%= slotId %>}'
+						hx-swap="innerHTML"
 					<% } %>
 				></div>
 			<% } %>

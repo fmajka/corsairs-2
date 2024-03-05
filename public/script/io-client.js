@@ -12,13 +12,13 @@ socket.on("disconnect", () => {
 	console.log("Disconnected!");
 });
 
-socket.on("socketid", ({id, name}) => {
+socket.on("socket-id", ({id, name}) => {
 	console.log(id);
 
 	document.getElementById("player-name").innerHTML = name;
 	document.getElementById("player-avatar").style.backgroundImage = `url('avatars/Corsair.jpg')`;
 
-	fetch("/socketid", {
+	fetch("/socket-id", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -32,51 +32,22 @@ socket.on("crew-change", ({id}) => {
 
 	// Update tavern list's target attribute
 	const el = document.querySelector(".tavern-list");
+	console.log(el)
 	if(el) {
-		el.setAttribute("hx-target", `#crew-${id}`);
+		const crewId = `#crew-${id}`;
+		const target = el.querySelector(crewId);
+
+		if(target) {
+			el.setAttribute("hx-target", crewId);
+			el.setAttribute("hx-swap", "outerHTML");
+		}
+		else {
+			el.setAttribute("hx-target", "this");
+			el.setAttribute("hx-swap", "beforeend");
+		}
 		el.setAttribute("hx-vals", `{"type": "tavern", "crewId": ${id}}`);
 	}
 	
 	console.log("gonna dispatch the event", event)
 	document.body.dispatchEvent(event);
 })
-
-socket.on("crew-join", ({avatar, name, crewId, slotId}) => {
-	let el = document.querySelector(`.tavern-list > #crew-${crewId}`);
-	// Crew list update
-	if(el) {
-		if(el = el.querySelectorAll(".avatars > .avatar")[slotId]) {
-			el.style.backgroundImage = `url('${avatar}')`;
-		}
-	}
-	// Crew update
-	else {
-		el = document.querySelector(".crew-lobby");
-		if(el && el.dataset.crewId == crewId) {
-			if(el = el.querySelectorAll(".player-list > .list-element")[slotId]) {
-				el.querySelector(".avatar").style.backgroundImage = `url('${avatar}')`;
-				el.querySelector(".name").innerHTML = name;
-			}
-		}
-	}
-});
-
-socket.on("crew-leave", ({crewId, slotId}) => {
-	let el = document.querySelector(`.tavern-list > #crew-${crewId}`);
-	// Crew list update
-	if(el) {
-		if(el = el.querySelectorAll(".avatars > .avatar")[slotId]) {
-			el.style.backgroundImage = '';
-		}
-	}
-	// Crew update
-	else {
-		el = document.querySelector(".crew-lobby");
-		if(el && el.dataset.crewId == crewId) {
-			if(el = el.querySelectorAll(".player-list > .list-element")[slotId]) {
-				el.querySelector(".avatar").style.backgroundImage = '';
-				el.querySelector(".name").innerHTML = "Puste";
-			}
-		}
-	}
-});

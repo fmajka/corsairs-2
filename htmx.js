@@ -17,13 +17,13 @@ router.post("/crew-change", (req, res) => {
 		res.render("partials/crew-list", {crew});
 	}
 	else if(type === "tavern") {
-		res.render("partials/tavern-member", {crew});
+		if(!crew) res.send("");
+		else res.render("partials/tavern-member", {crew});
 	}
 	else {
 		res.end();
 	}
-})
-//
+});
 
 router.get("/crew-add", (req, res) => {
 	const player = c2p(req.headers.cookie);
@@ -52,13 +52,14 @@ router.post("/crew-join", (req, res) => {
 		// TODO: if in a different crew, warn before join
 		if(player.crew) {
 			playerLeaveCrew(player);
+			player.socket.broadcast.emit("crew-change", { id: player.crew.id });
 		}
 		player.crew = crew;
 		crew.players[slotId] = player;
 		res.render('partials/crew-lobby', { crew });
 
 		// Update other players' UI
-		player.socket.broadcast.emit("crew-join", {avatar: player.avatar, name: player.name, crewId: crew.id, slotId});
+		player.socket.broadcast.emit("crew-change", { id: crew.id });
 	}
 	else {
 		res.render('partials/tavern-list', { crew: player?.crew, crews });
@@ -68,13 +69,12 @@ router.post("/crew-join", (req, res) => {
 router.get("/crew-leave", (req, res) => {
 	const player = c2p(req.headers.cookie);
 	const crew = player.crew;
-	const slotId = crew.players.indexOf(player);
 
 	playerLeaveCrew(player);
 	res.render('partials/tavern-list', { crews });
 
 	// Update other players' UI
-	player.socket.broadcast.emit("crew-leave", {crewId: crew.id, slotId});
+	player.socket.broadcast.emit("crew-change", { id: crew.id }); 
 });
 
 router.get("/tavern-list", (req, res) => {
@@ -88,6 +88,9 @@ router.get("/crew-lobby", (req, res) => {
 
 	if(!player.crew) {
 		playerCreateCrew(player);
+		
+		// Update other players' UI
+		player.socket.broadcast.emit("crew-change", { id: player.crew.id }); 
 	}
 	res.render('partials/crew-lobby', { crew: player.crew });
 });

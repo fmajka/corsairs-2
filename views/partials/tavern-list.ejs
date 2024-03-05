@@ -1,9 +1,8 @@
-<!-- hx-target added dynamically -->
+<!-- hx-target, hx-swap & hx-vals updated dynamically via websockets -->
 <div 
 	class="list tavern-list"
 	hx-trigger="crew-change from:body" 
 	hx-post="/htmx/crew-change"
-	hx-swap="outerHTML"
 >
 	Crew list
 	<% for(const crew of crews) { %>

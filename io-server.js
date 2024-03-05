@@ -15,7 +15,7 @@ io.sockets.on('connection', socket => {
 	} while(playerNameMap.has(name));
 	createPlayer(socket, name);
 
-	io.to(socket.id).emit("socketid", {id: socket.id, name});
+	io.to(socket.id).emit("socket-id", {id: socket.id, name});
 	
 	socket.on("disconnect", () => {
 		console.log(`${socket.id} disconnected!`);

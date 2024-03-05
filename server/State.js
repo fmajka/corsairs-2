@@ -53,7 +53,9 @@ function playerLeaveCrew(player) {
 	arrRemoveItem(crew.players, player);
 	if(crew.count() == 0) {
 		arrRemoveItem(crews, crew);
+		return false;
 	}
+	return true;
 }
 
 function deletePlayer(player) {
