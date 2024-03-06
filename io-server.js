@@ -13,9 +13,9 @@ io.sockets.on('connection', socket => {
 		const id = Math.floor(Math.random() * 1000);
 		name = `Corsair${id}`;
 	} while(playerNameMap.has(name));
-	createPlayer(socket, name);
+	const player = createPlayer(socket, name);
 
-	io.to(socket.id).emit("socket-id", {id: socket.id, name});
+	io.to(socket.id).emit("socket-id", {id: socket.id, name, avatar: player.avatar});
 	
 	socket.on("disconnect", () => {
 		console.log(`${socket.id} disconnected!`);

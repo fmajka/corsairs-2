@@ -42,20 +42,20 @@ router.get("/crew-add", (req, res) => {
 router.post("/crew-join", (req, res) => {
 	const player = c2p(req.headers.cookie);
 	const crewId = req.body.crewId;
-	const slotId = req.body.slotId;
 
 	const crew = getCrewById(crewId);
 	if(!crew) { res.end(); return; }
+	const slot = crew.count();
 
 	// If doesn't belong to this crew and slot is free - join!
-	if(!crew.players.includes(player) && !crew.players[slotId]) {
+	if(!crew.players.includes(player) && slot < crew.slotsMax) {
 		// TODO: if in a different crew, warn before join
 		if(player.crew) {
 			playerLeaveCrew(player);
 			player.socket.broadcast.emit("crew-change", { id: player.crew.id });
 		}
 		player.crew = crew;
-		crew.players[slotId] = player;
+		crew.players[slot] = player;
 		res.render('partials/crew-lobby', { crew });
 
 		// Update other players' UI

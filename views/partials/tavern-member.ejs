@@ -20,7 +20,7 @@
 					<% if(!crew.players[slotId]) { %>
 						hx-post="/htmx/crew-join" 
 						hx-target="#view" 
-						hx-vals='{"crewId": <%= crew.id %>, "slotId": <%= slotId %>}'
+						hx-vals='{"crewId": <%= crew.id %>}'
 						hx-swap="innerHTML"
 					<% } %>
 				></div>

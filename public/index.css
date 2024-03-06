@@ -6,7 +6,7 @@
 	--grey: #444;
 	--wood: #8D6346;
 
-	color: var(--cloth);
+	color: var(--amber);
 	font-family: "Default";
 	font-size: 20px;
 }
@@ -109,7 +109,7 @@ button {
 .menu-item:hover {
 	/* background-color: var(--gold); */
 	cursor: pointer;
-	text-decoration: #5448C8 wavy underline;
+	/* text-decoration: #5448C8 wavy underline; */
 }
 
 .avatar {

@@ -8,18 +8,31 @@
 	width: 100%;
 	z-index: 1;
 
-	& > .title {
-		margin: 0 auto;
-		padding: 0 2.5rem;
+	& > .spacer {
+		flex-shrink: 1; 
+		width: 10rem;
 	}
 
-	& > .crew, & > .player {
-		width: 18rem;
+	& > div:not(.spacer) {
+		flex-shrink: 0;
+	}
+
+	& > .title-wrapper {
+		margin: 0 auto;
+
+		& > .title {
+			padding: 0 2.5rem;
+		}
+	}
+
+	& > .crew {
+		width: 8rem;
 	}
 
 	& > .player {
-		display: flex;
 		align-items: start;
+		display: flex;
+		width: 18rem;
 
 		& > .avatar {
 			border: 2px solid var(--cloth);
@@ -148,7 +161,7 @@
 			}
 	
 			& > .avatar {
-				border: solid var(--wood);
+				border: solid var(--cloth);
 				border-radius: 5px 0 0 5px;
 				border-width: 2px 0 2px 2px;
 				flex-shrink: 0;

@@ -12,11 +12,11 @@ socket.on("disconnect", () => {
 	console.log("Disconnected!");
 });
 
-socket.on("socket-id", ({id, name}) => {
+socket.on("socket-id", ({id, name, avatar}) => {
 	console.log(id);
 
 	document.getElementById("player-name").innerHTML = name;
-	document.getElementById("player-avatar").style.backgroundImage = `url('avatars/Corsair.jpg')`;
+	document.getElementById("player-avatar").style.backgroundImage = `url('${avatar}')`;
 
 	fetch("/socket-id", {
     method: "POST",
@@ -28,8 +28,6 @@ socket.on("socket-id", ({id, name}) => {
 });
 
 socket.on("crew-change", ({id}) => {
-	const event = new CustomEvent("crew-change");
-
 	// Update tavern list's target attribute
 	const el = document.querySelector(".tavern-list");
 	console.log(el)
@@ -48,6 +46,6 @@ socket.on("crew-change", ({id}) => {
 		el.setAttribute("hx-vals", `{"type": "tavern", "crewId": ${id}}`);
 	}
 	
-	console.log("gonna dispatch the event", event)
-	document.body.dispatchEvent(event);
+	document.body.dispatchEvent(new CustomEvent("crew-change"));
+	console.log(`Crew ${id} changed!`)
 })
