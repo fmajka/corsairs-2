@@ -1,5 +1,6 @@
 import { app } from "./app.js";
 import htmx from "./htmx.js"
+import pug from "pug"
 
 app.use("/htmx", htmx);
 

@@ -1,0 +1,24 @@
+.list-element(id=`crew-${crew.id}`)
+
+	.left.rounded.shade-b
+		span.txt-amber.capitalize= crew.mode
+		span.txt-amber= `${crew.count()} / ${crew.slotsMax}`
+
+	.separator.bg-amber.rounded.shade-b
+	
+	.right.rounded.shade-b
+		span.txt-amber= crew.name
+		.avatars
+			-
+				for(let slotId = 0; slotId < crew.slotsMax; slotId++) {
+				const json = `js:{crewId: ${crew.id}}`
+				const attrs = (crew.players[slotId]) 
+				? { style: `background-image: url('${crew.players[slotId].avatar}')`} 
+				: {
+						"hx-post": "/htmx/crew-join", 
+						"hx-target": "#view", 
+						"hx-vals": json, 
+						"hx-swap": "innerHTML"
+					}
+			.avatar&attributes(attrs)
+			- }

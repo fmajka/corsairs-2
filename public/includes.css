@@ -19,6 +19,7 @@
 
 	& > .title-wrapper {
 		margin: 0 auto;
+		padding: 0 0.5rem;
 
 		& > .title {
 			padding: 0 2.5rem;

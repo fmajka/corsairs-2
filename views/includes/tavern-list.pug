@@ -1,0 +1,14 @@
+<!-- hx-target, hx-swap & hx-vals updated dynamically via websockets -->
+.list.tavern-list(hx-trigger="crew-change from:body" hx-post="/htmx/crew-change")
+	| Crew list
+	for crew of crews
+		include tavern-member
+
+.br-buttons
+	button.bg-darkwood.shade-b(hx-get="/htmx/crew-lobby" hx-target="#view")
+		if player.crew
+			| MOJA ZAŁOGA
+		else
+			| STWÓRZ ZAŁOGĘ
+
+	button.bg-grey.shade-b(hx-get="/htmx/main-menu" hx-target="#view") POWRÓT

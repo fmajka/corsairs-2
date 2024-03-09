@@ -5,7 +5,7 @@ import io from "./io-server.js";
 const router = express.Router();
 
 router.get("/main-menu", (_, res) => {
-	res.render('partials/main-menu');
+	res.render('includes/main-menu');
 });
 
 router.post("/crew-change", (req, res) => {
@@ -14,11 +14,11 @@ router.post("/crew-change", (req, res) => {
 	const crew = getCrewById(crewId);
 
 	if(type === "crew") {
-		res.render("partials/crew-list", {crew});
+		res.render("includes/crew-list", {crew});
 	}
 	else if(type === "tavern") {
 		if(!crew) res.send("");
-		else res.render("partials/tavern-member", {crew});
+		else res.render("includes/tavern-member", {crew});
 	}
 	else {
 		res.end();
@@ -31,7 +31,7 @@ router.get("/crew-add", (req, res) => {
 
 	if(crew && crew.slotsMax < 5) {
 		crew.slotsMax++;
-		res.render('partials/crew-member', { player: null });
+		res.render('includes/crew-member', { player: null });
 		player.socket.broadcast.emit("crew-change", { id: crew.id });
 	}
 	else {
@@ -56,13 +56,13 @@ router.post("/crew-join", (req, res) => {
 		}
 		player.crew = crew;
 		crew.players[slot] = player;
-		res.render('partials/crew-lobby', { crew });
+		res.render('includes/crew-lobby', { crew });
 
 		// Update other players' UI
 		player.socket.broadcast.emit("crew-change", { id: crew.id });
 	}
 	else {
-		res.render('partials/tavern-list', { crew: player?.crew, crews });
+		res.render('includes/tavern-list', { player, crews });
 	}
 });
 
@@ -71,7 +71,7 @@ router.get("/crew-leave", (req, res) => {
 	const crew = player.crew;
 
 	playerLeaveCrew(player);
-	res.render('partials/tavern-list', { crews });
+	res.render('includes/tavern-list', { player, crews });
 
 	// Update other players' UI
 	player.socket.broadcast.emit("crew-change", { id: crew.id }); 
@@ -80,7 +80,7 @@ router.get("/crew-leave", (req, res) => {
 router.get("/tavern-list", (req, res) => {
 	const player = c2p(req.headers.cookie);
 
-	res.render('partials/tavern-list', { crew: player?.crew, crews });
+	res.render('includes/tavern-list', { player, crews });
 });
 
 router.get("/crew-lobby", (req, res) => {
@@ -92,7 +92,7 @@ router.get("/crew-lobby", (req, res) => {
 		// Update other players' UI
 		player.socket.broadcast.emit("crew-change", { id: player.crew.id }); 
 	}
-	res.render('partials/crew-lobby', { crew: player.crew });
+	res.render('includes/crew-lobby', { crew: player.crew });
 });
 
 export default router;
