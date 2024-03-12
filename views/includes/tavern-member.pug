@@ -11,13 +11,12 @@
 		.avatars
 			-
 				for(let slotId = 0; slotId < crew.slotsMax; slotId++) {
-				const json = `js:{crewId: ${crew.id}}`
 				const attrs = (crew.players[slotId]) 
 				? { style: `background-image: url('${crew.players[slotId].avatar}')`} 
 				: {
 						"hx-post": "/htmx/crew-join", 
 						"hx-target": "#view", 
-						"hx-vals": json, 
+						"hx-vals": `js:{crewId: ${crew.id}}`, 
 						"hx-swap": "innerHTML"
 					}
 			.avatar&attributes(attrs)

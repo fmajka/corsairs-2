@@ -6,11 +6,10 @@ import EntityCastPacket from "./packets/EntityCastPacket.js";
 import EntityDeletePacket from "./packets/EntityDeletePacket.js";
 import SetEntitySpritePacket from "./packets/SetEntitySpritePacket.js";
 
-import Player from "./components/Player.js";
+import CorsairsServer from "./CorsairsServer.js";
 
 // TODO: I would prefer not to import external modules...
-import UserController from "../backend/UserController.cjs";
-import socketManager from "../backend/SocketManager.js";
+const socketManager = {};
 
 export default class CorsairsSessionServer extends CorsairsSession {
 	// Id of this session's owner
@@ -46,68 +45,30 @@ export default class CorsairsSessionServer extends CorsairsSession {
 		else {
 			this.packetBuffer.push(packet);
 		}
-
 	}
 
-	// Sends score to the database - triggered on restart & leave
-	// TODO: what about multiplayer games?
-	submitScore() {
-		if(this.score <= 0)
-			return;
-
-		let usernames = [];
-		// List all players' usernames
-		for(let [playerId, player] of this.players.entries()) {
-			const username = socketManager.socket2Name(playerId);
-			// Add if found
-			if(username) {
-				usernames.push(username);
-			}
-		}
-
-		UserController.addScores(usernames, this.score);
-
-		return;
-	}
-
-    // Starts up / resets the game
+	// Starts up / resets the game
 	start(gameType) {
-		// Submits score before it resets
-		this.submitScore();
-
-		// Init server-side players from the party
-		let party = socketManager.socket2Party(this.socketId);
-		for(let memberId of party.members) {
-			let player = new Player(memberId);
-			player.typeId = socketManager.controllerMap.get(memberId);
-
-			this.players.set(memberId, player);
-			
-			// Map this session to all the players in it - used for processing inputs
-			// TODO: rework it
-			socketManager.gameMap.set(memberId, this);
-		}
+		CorsairsServer.onStart(this);
 
 		// Resets game state & creates starting entities
 		super.start(gameType);
 
+		// TODO: shouldn't be necessary
 		// Set additional props
-		this.alivePlayers = party.members.size;
+		// this.alivePlayers = party.members.size;
 	}
 
 	// End the game and free the players when they are defeated
 	end() {
 		super.end();
-		// TODO: could use some rework
-		// Clear users current session when it ends
-		let party = socketManager.socket2Party(this.socketId);
-		for(let memberId of party.members) {
-			socketManager.gameMap.delete(memberId);
-		}
+
+		// Callback that handles submitting score and sending info to players
+		CorsairsServer.onEnd(this);
 	}
 
-    // Insert entity to the game
-    entityAdd(entity, propArr = []) {
+	// Insert entity to the game
+	entityAdd(entity, propArr = []) {
 		// It's the server - just insert the new entity
 		entity.id = this.entityCount;
 		this.entities.set(this.entityCount++, entity);

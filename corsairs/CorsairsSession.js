@@ -1,5 +1,4 @@
 import Ability from "./components/Ability.js";
-
 import EntityShip from "./entities/EntityShip.js";
 
 export default class CorsairsSession {

@@ -17,11 +17,13 @@
 	button.bg-grey.shade-b(hx-get="/htmx/crew-leave" hx-target="#view") OPUŚĆ ZAŁOGĘ
 
 <!-- Start game script -->
-script.
+script(type="module").
+	import { socket } from "/script/io-client.js";
+
 	document.getElementById("ready-btn").addEventListener("click", async () => {
 		if (!Corsairs.mounted) {
 			console.log("Still not mounted lol");
-			await Corsairs.mount("#game-wrapper");
+			await Corsairs.mount("#game-wrapper", socket);
 		}
 		Corsairs.start();
 	});

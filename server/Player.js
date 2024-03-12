@@ -4,5 +4,8 @@ export default class Player {
 		this.crew = null;
 		this.name = name;
 		this.socket = socket;
+
+		// When a CorsairsSessionServer is going, this is set
+		this.session = null;
 	}
 }

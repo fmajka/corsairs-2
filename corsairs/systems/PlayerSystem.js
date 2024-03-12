@@ -129,7 +129,7 @@ export default class PlayerSystem {
 	static clear(session) {
 		// Clear all the players' inputs
 		if(session.serverSide) {
-			for(let [playerId, player] of session.players.entries()) {
+			for(const [playerId, player] of session.players.entries()) {
 				player.clear();
 			}
 		}

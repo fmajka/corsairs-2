@@ -1,4 +1,5 @@
 import { io } from "https://cdn.socket.io/4.7.4/socket.io.esm.min.js";
+import Corsairs from "../../corsairs/Corsairs.js";
 
 const URL = "http://localhost:2137";
 //const URL = `http://${host}:3000`;
@@ -12,6 +13,7 @@ socket.on("disconnect", () => {
 	console.log("Disconnected!");
 });
 
+// Cookies!
 socket.on("socket-id", ({id, name, avatar}) => {
 	console.log(id);
 
@@ -27,6 +29,7 @@ socket.on("socket-id", ({id, name, avatar}) => {
   });
 });
 
+// UI updates
 socket.on("crew-change", ({id}) => {
 	// Update tavern list's target attribute
 	const el = document.querySelector(".tavern-list");
@@ -48,4 +51,98 @@ socket.on("crew-change", ({id}) => {
 	
 	document.body.dispatchEvent(new CustomEvent("crew-change"));
 	console.log(`Crew ${id} changed!`)
-})
+});
+
+// Game updates
+socket.on("corsairs-run", ({gameType}) => {
+  // TODO: set it somewhere else?
+  Corsairs.session.multiplayer = true;
+  Corsairs.run(gameType);
+});
+
+socket.on("corsairs-data", dataArr => {
+  if(!Corsairs.session.running) {
+    console.log(`Received corsairs-data (length: ${dataArr.length}) when the game isn't running`);
+    return;
+  }
+    
+  // Loop through all data packets in the array
+  for(const data of dataArr) {
+    let entity = null;
+    let player = null;
+    
+    switch(data.type) {
+      // Insert entity to the game
+      case "EntityAdd":
+        // Gets class from object storing references to all Corsairs Entity subclasses
+        entity = new Corsairs.classMap[data.entityClass](data.x, data.y);
+        entity.id = parseInt(data.entityId);
+        for(const prop in data.props) {
+          entity[prop] = data.props[prop];
+          //console.log(`EntityAdd: class=${data.entityClass} ${prop}=${data.props[prop]}`);
+        }
+        Corsairs.session.entityAdd(entity);
+        break;
+
+      // Make entity cast an ability
+      case "EntityCast":
+        entity = Corsairs.session.entities.get(data.entityId);
+        if(entity) {
+          // Passing true enables casting for multiplayer games
+          Corsairs.session.entityCast(entity, data.abilityId, true);
+        }
+        break;
+
+      // Delete entity from the game
+      case "EntityDelete":
+        //console.log(`EntityDelete: id=${data.entityId}`);
+        entity = Corsairs.session.entities.get(data.entityId);
+        Corsairs.session.entityDelete(entity);
+        break;
+
+      // Set entities properties
+      case "EntitySet":
+        entity = Corsairs.session.entities.get(data.entityId);
+        if(entity) {
+          for(const prop in data.props) {
+            entity[prop] = data.props[prop];
+          }
+        }
+        break;
+
+      // Allows the player to control certain entity
+      case "PlayerBindEntity":
+        entity = Corsairs.session.entities.get(data.entityId);
+        // TODO: this only works for 1 player (which is fine, locally we don't see other players, only their entities)
+        if(entity) {
+          player = Corsairs.session.players.get(0);
+          player.entity = entity;
+          //console.log(`PlayerBindEntity: bound ${data.entityId} to some player`);
+        } 
+        else {
+          console.log(`PlayerBindEntity: entity with id ${data.entityId} not found`);
+        }
+        break;
+
+        // Update game properties
+        case "GameState":
+          for(const prop in data.props) {
+            Corsairs.session[prop] = data.props[prop];
+            //console.log(`GameState: ${prop} set to ${Corsairs.session[prop]}`);
+          }
+          break;
+
+        // Update game properties
+        case "SetEntitySprite":
+          entity = Corsairs.session.entities.get(data.entityId);
+          if(entity) {
+            Corsairs.session.setEntitySprite(entity, data.spriteName);
+          }
+          break;
+
+      default:
+        console.log(`Unknown socket corsairs-data type: ${data.type}`);
+    }
+
+  }
+});

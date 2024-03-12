@@ -13,6 +13,8 @@ export default class EventManager {
 		window.addEventListener('touchstart', this.touchstart);
 		window.addEventListener('touchmove', this.touchmove);
 		window.addEventListener('touchend', this.touchend);
+		
+		console.log("EventManager init!");
 	}
 
 	static keydown(event){

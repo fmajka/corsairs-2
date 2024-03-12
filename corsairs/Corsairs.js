@@ -17,7 +17,6 @@ import PlayerSystem from "./systems/PlayerSystem.js";
 import RenderSystem from "./systems/RenderSystem.js";
 import InterfaceSystem from "./systems/InterfaceSystem.js";
 
-import { socket } from "/script/io-client.js";
 import CorsairsSession from "./CorsairsSession.js";
 
 import ControllerType from "./enums/ControllerType.js";
@@ -38,6 +37,9 @@ export default class Corsairs {
 		EntityShip: EntityShip
 	};
 
+	// Socket now passed as mount argument
+	static socket = null;
+
 	// Local game session
 	static session = new CorsairsSession();
 
@@ -53,7 +55,7 @@ export default class Corsairs {
 	static loaded = false;
 
 	// Attach game-related elements to a wrapper & initialize stuff...
-	static async mount(wrapperQuery) {
+	static async mount(wrapperQuery, socket) {
 		this.wrapper = document.querySelector(wrapperQuery);
 		let canvas = document.createElement("canvas");
 		let overlay = document.createElement("div");
@@ -63,11 +65,15 @@ export default class Corsairs {
 		this.wrapper.appendChild(canvas);
 		this.wrapper.appendChild(overlay);
 
+		// Mobile gaming
 		canvas.addEventListener('touchstart', event => event.preventDefault());
 		overlay.addEventListener('touchstart', event => event.preventDefault());
 		
 		Corsairs.ctx = canvas.getContext("2d");
 		resizeCanvas();
+
+		// Multiplayer capabilities
+		this.socket = socket;
 
 		this.mounted = true;
 
@@ -146,6 +152,7 @@ export default class Corsairs {
 	static run(gameType) {
 		// TODO: this looks kinda ugly...
 		this.wrapper.style.display = ""
+		
 		// Prevent spacebar from triggering start button and restarting the game
 		const input = document.getElementById("ready-btn");
 		input.blur();
@@ -168,7 +175,6 @@ export default class Corsairs {
 		// Canvas dimensions fix
 		resizeCanvas();
 
-
 		window.requestAnimationFrame(this.update);
 	}
 
@@ -184,7 +190,7 @@ export default class Corsairs {
 		// (Re)start a server-side session for the player
 		if(this.session.multiplayer) {
 			// Tell the server to start, response ("runGame") is handled in socket.js
-			socket.emit("startGame", { gameType: gameType });
+			this.socket.emit("corsairs-start", { gameType: gameType });
 		}
 		// Singleplayer experience
 		else {
@@ -200,7 +206,7 @@ export default class Corsairs {
 		
 		// Emit info to the server to end session
 		if(this.session.multiplayer) {
-			socket.emit("leaveGame", {});
+			this.socket.emit("corsairs-leave", {});
 		}
 
 		// Hide the display

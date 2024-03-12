@@ -6,14 +6,34 @@ import MovementSystem from "./systems/MovementSystem.js";
 import PlayerSystem from "./systems/PlayerSystem.js";
 
 import CorsairsSessionServer from "./CorsairsSessionServer.js";
-import io from "../backend/io.js";
 
 export default class CorsairsServer {
 	static sessions = new Map();
 	static interval = 33;
 	static timeout = null;
 
-	static createSession(socketId, {gameType}) {
+	// Callbacks
+	static onStart = (session) => {};
+	static onEnd = (session) => {};
+
+	static io = null;
+
+	static init(io) {
+		this.io = io;
+		return this;
+	}
+
+	static setOnStart(onStart) { 
+		this.onStart = onStart; 
+		return this; 
+	}
+	
+	static setOnEnd(onEnd) { 
+		this.onEnd = onEnd; 
+		return this; 
+	}
+
+	static createSession(socketId, {gameType = "classic"}) {
 		let session = null;
 		// User's session should be mapped to their socketId?
 		if(!this.sessions.has(socketId)) {
@@ -33,11 +53,10 @@ export default class CorsairsServer {
 		if(!this.sessions.has(socketId))
 			return;
 		
-		let session = this.sessions.get(socketId);
-		session.running = false;
+		const session = this.sessions.get(socketId);
 		this.sessions.delete(socketId);
-		// Send score to db
-		session.submitScore();
+		// TODO: see if this works properly
+		session.end();
 	}
 
 	// Request game tick
@@ -48,8 +67,8 @@ export default class CorsairsServer {
 	// Updates all sessions
 	static update() {
 		let currentTime = Date.now();
-        let globalDt = Math.min(0.05, (currentTime - CorsairsServer.lastTime) / 1000);
-        CorsairsServer.lastTime = currentTime;
+		let globalDt = Math.min(0.05, (currentTime - CorsairsServer.lastTime) / 1000);
+		CorsairsServer.lastTime = currentTime;
 		CorsairsServer.upTime += globalDt;
 
 		// Loop through all sessions
@@ -67,12 +86,12 @@ export default class CorsairsServer {
 				dt *= session.speed;
 
 			// Update loop
-			PlayerSystem.update		(session, dt);
-			MovementSystem.update	(session, dt);
-			CollisionSystem.update	(session);
-			AbilitySystem.update	(session, dt);
-			AISystem.update			(session, dt);
-			ClearSystem.update		(session, dt);
+			PlayerSystem.update(session, dt);
+			MovementSystem.update(session, dt);
+			CollisionSystem.update(session);
+			AbilitySystem.update(session, dt);
+			AISystem.update(session, dt);
+			ClearSystem.update(session, dt);
 
 			PlayerSystem.clear(session);
 
@@ -81,12 +100,11 @@ export default class CorsairsServer {
 			for(let [playerId, player] of session.players.entries()) {
 				let packets = session.packetBuffer.concat(player.localPacketBuffer);
 				if(packets.length > 0) {
-					io.to(playerId).emit("gameData", packets);
+					CorsairsServer.io.to(playerId).emit("corsairs-data", packets);
 					player.localPacketBuffer = [];
 				}
 			}
-			session.packetBuffer = [];	
-                
+			session.packetBuffer = [];
 		}
 
 		// Request another frame	

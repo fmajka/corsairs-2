@@ -32,6 +32,15 @@ function createPlayer(socket, name) {
 	return player;
 }
 
+function getRandomName() {
+	let name = "";
+	do {
+		const id = Math.floor(100 + Math.random() * 900);
+		name = `Corsair${id}`;
+	} while(playerNameMap.has(name));
+	return name;
+}
+
 function getCrewById(id) {
 	return crews.find(crew => id == crew.id);
 }
@@ -66,4 +75,9 @@ function deletePlayer(player) {
 	}
 }
 
-export { crews, playerNameMap, sockets, createPlayer, deletePlayer, getCrewById, playerCreateCrew, playerLeaveCrew, c2p, s2p }
+export { 
+	crews, playerNameMap, sockets, 
+	c2p, s2p,
+	createPlayer, deletePlayer, getCrewById, playerCreateCrew, playerLeaveCrew,
+	getRandomName,
+}
