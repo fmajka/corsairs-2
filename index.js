@@ -1,7 +1,7 @@
 import { app } from "./server/app.js";
 import htmx from "./server/htmx.js"
 import io from "./server/io-server.js";
-import { s2p } from "./server/state.js";
+import { s2u } from "./server/state.js";
 
 import CorsairsServer from "./corsairs/CorsairsServer.js";
 import Player from "./corsairs/components/Player.js";
@@ -21,26 +21,26 @@ app.post("/socket-id", (req, res) => {
 
 CorsairsServer.init(io)
 	.setOnStart(session => {
-		const crew = s2p(session.socketId)?.crew;
+		const crew = s2u(session.socketId)?.crew;
 		if(!crew) { return console.log("CorsiarsServer.onStart", !!crew); }
 
 		// Init server-side players from the party
-		for(const crewPlayer of crew.players) {
-			crewPlayer.session = session;
+		for(const crewmate of crew.mates) {
+			crewmate.session = session;
 
-			const socketId = crewPlayer.socket.id;
+			const socketId = crewmate.socket.id;
 			const player = new Player(socketId);
 			session.players.set(socketId, player);
 		}
 	})
 	.setOnEnd(session => {
-		const crew = s2p(session.socketId)?.crew;
+		const crew = s2u(session.socketId)?.crew;
 		if(!crew) { return console.log("CorsiarsServer.onEnd", !!crew); }
 	
 		// TODO: actually submit score
 		console.log("Submitted score:", session.score);
-		for(const crewPlayer of crew.players) {
-			crewPlayer.session = null;
+		for(const crewmate of crew.mates) {
+			crewmate.session = null;
 		}
 	});
 

@@ -1,16 +1,16 @@
 export default class Crew {
 	static id = 0;
 
-	constructor(player) {
+	constructor(user) {
 		this.id = Crew.id++;
-		this.players = [player];
+		this.mates = [user];
 
-		this.name = `Załoga ${player.name}`;
+		this.name = `Załoga ${user.name}`;
 		this.mode = "classic";
 		this.slotsMax = 1;
 	}
 
 	count() {
-		return this.players.length;
+		return this.mates.length;
 	}
 }

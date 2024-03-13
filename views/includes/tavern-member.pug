@@ -11,8 +11,8 @@
 		.avatars
 			-
 				for(let slotId = 0; slotId < crew.slotsMax; slotId++) {
-				const attrs = (crew.players[slotId]) 
-				? { style: `background-image: url('${crew.players[slotId].avatar}')`} 
+				const attrs = (crew.mates[slotId]) 
+				? { style: `background-image: url('${crew.mates[slotId].avatar}')`} 
 				: {
 						"hx-post": "/htmx/crew-join", 
 						"hx-target": "#view", 

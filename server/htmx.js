@@ -1,5 +1,5 @@
 import express from "express";
-import { crews, getCrewById, playerCreateCrew, playerLeaveCrew, c2p } from "./state.js";
+import { crews, getCrewById, userCreateCrew, userLeaveCrew, c2u } from "./state.js";
 
 const router = express.Router();
 
@@ -25,13 +25,13 @@ router.post("/crew-change", (req, res) => {
 });
 
 router.get("/crew-add", (req, res) => {
-	const player = c2p(req.headers.cookie);
-	const crew = player.crew;
+	const user = c2u(req.headers.cookie);
+	const crew = user.crew;
 
 	if(crew && crew.slotsMax < 5) {
 		crew.slotsMax++;
-		res.render('includes/crew-member', { player: null });
-		player.socket.broadcast.emit("crew-change", { id: crew.id });
+		res.render('includes/crew-member', { user: null });
+		user.socket.broadcast.emit("crew-change", { id: crew.id });
 	}
 	else {
 		res.end();
@@ -39,7 +39,7 @@ router.get("/crew-add", (req, res) => {
 });
 
 router.post("/crew-join", (req, res) => {
-	const player = c2p(req.headers.cookie);
+	const user = c2u(req.headers.cookie);
 	const crewId = req.body.crewId;
 
 	const crew = getCrewById(crewId);
@@ -47,51 +47,51 @@ router.post("/crew-join", (req, res) => {
 	const slot = crew.count();
 
 	// If doesn't belong to this crew and slot is free - join!
-	if(!crew.players.includes(player) && slot < crew.slotsMax) {
+	if(!crew.mates.includes(user) && slot < crew.slotsMax) {
 		// TODO: if in a different crew, warn before join
-		if(player.crew) {
-			playerLeaveCrew(player);
-			player.socket.broadcast.emit("crew-change", { id: player.crew.id });
+		if(user.crew) {
+			userLeaveCrew(user);
+			user.socket.broadcast.emit("crew-change", { id: user.crew.id });
 		}
-		player.crew = crew;
-		crew.players[slot] = player;
+		user.crew = crew;
+		crew.mates[slot] = user;
 		res.render('includes/crew-lobby', { crew });
 
-		// Update other players' UI
-		player.socket.broadcast.emit("crew-change", { id: crew.id });
+		// Update other users' UI
+		user.socket.broadcast.emit("crew-change", { id: crew.id });
 	}
 	else {
-		res.render('includes/tavern-list', { player, crews });
+		res.render('includes/tavern-list', { user, crews });
 	}
 });
 
 router.get("/crew-leave", (req, res) => {
-	const player = c2p(req.headers.cookie);
-	const crew = player.crew;
+	const user = c2u(req.headers.cookie);
+	const crew = user.crew;
 
-	playerLeaveCrew(player);
-	res.render('includes/tavern-list', { player, crews });
+	userLeaveCrew(user);
+	res.render('includes/tavern-list', { user, crews });
 
-	// Update other players' UI
-	player.socket.broadcast.emit("crew-change", { id: crew.id }); 
+	// Update other users' UI
+	user.socket.broadcast.emit("crew-change", { id: crew.id }); 
 });
 
 router.get("/tavern-list", (req, res) => {
-	const player = c2p(req.headers.cookie);
+	const user = c2u(req.headers.cookie);
 
-	res.render('includes/tavern-list', { player, crews });
+	res.render('includes/tavern-list', { user, crews });
 });
 
 router.get("/crew-lobby", (req, res) => {
-	const player = c2p(req.headers.cookie);
+	const user = c2u(req.headers.cookie);
 
-	if(!player.crew) {
-		playerCreateCrew(player);
+	if(!user.crew) {
+		userCreateCrew(user);
 		
-		// Update other players' UI
-		player.socket.broadcast.emit("crew-change", { id: player.crew.id }); 
+		// Update other users' UI
+		user.socket.broadcast.emit("crew-change", { id: user.crew.id }); 
 	}
-	res.render('includes/crew-lobby', { crew: player.crew });
+	res.render('includes/crew-lobby', { crew: user.crew });
 });
 
 export default router;

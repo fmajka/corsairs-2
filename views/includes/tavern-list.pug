@@ -6,7 +6,7 @@
 
 .br-buttons
 	button.bg-darkwood.shade-b(hx-get="/htmx/crew-lobby" hx-target="#view")
-		if player.crew
+		if user.crew
 			| MOJA ZAŁOGA
 		else
 			| STWÓRZ ZAŁOGĘ

@@ -1,5 +1,5 @@
 import { Server } from "socket.io";
-import { createPlayer, deletePlayer, getRandomName, s2p } from "./state.js";
+import { createUser, deleteUser, getRandomName, s2u } from "./state.js";
 import { server } from "./app.js";
 import CorsairsServer from "../corsairs/CorsairsServer.js";
 
@@ -9,22 +9,22 @@ const io = new Server(server);
 io.sockets.on('connection', socket => {
 	console.log(`${socket.id} connected!`);
 
-	const player = createPlayer(socket, getRandomName());
-	io.to(socket.id).emit("socket-id", {id: socket.id, name: player.name, avatar: player.avatar});
+	const user = createUser(socket, getRandomName());
+	io.to(socket.id).emit("socket-id", {id: socket.id, name: user.name, avatar: user.avatar});
 
 	// Clean up when a user disconnects
 	socket.on("disconnect", () => {
 		console.log(`${socket.id} disconnected!`);
-		deletePlayer(s2p(socket.id));
+		deleteUser(s2u(socket.id));
 	});
 
 	// Start a Corsairs game session on the server for the client
 	socket.on("corsairs-start", ({ gameType }) => {
-		const player = s2p(socket.id);
-		const crew = player?.crew;
+		const user = s2u(socket.id);
+		const crew = user?.crew;
 
-		if(!player || !crew) {
-			console.log("io/corsairs-start: ", !!player, !!crew);
+		if(!user || !crew) {
+			console.log("io/corsairs-start: ", !!user, !!crew);
 		}
 
 		// Return and send notification if someone else than the party owner tries to start the game
@@ -34,9 +34,9 @@ io.sockets.on('connection', socket => {
 		// }
 
 		// Send info to all the party members
-		for(const crewPlayer of crew.players) {
-				// TODO: maybe players should first respond if they are ready?
-				io.to(crewPlayer.socket.id).emit("corsairs-run", {gameType});
+		for(const crewmate of crew.mates) {
+				// TODO: maybe users should first respond if they are ready?
+				io.to(crewmate.socket.id).emit("corsairs-run", {gameType});
 		}
 
 		CorsairsServer.createSession(socket.id, {gameType});
@@ -50,17 +50,17 @@ io.sockets.on('connection', socket => {
 	// Process keyDown event & add the input to the player object
 	// PlayerSystem will process the inputs for the player in the session
 	socket.on("corsairs-keydown", key => {
-		const player = s2p(socket.id);
-		const sessionPlayer = player?.session?.players.get(socket.id);
+		const user = s2u(socket.id);
+		const player = user?.session?.players.get(socket.id);
 
-		sessionPlayer?.addInput(key);
+		player?.addInput(key);
 	});
 	
 	socket.on("corsairs-keyup", key => {
-		const player = s2p(socket.id);
-		const sessionPlayer = player?.session?.players.get(socket.id);
+		const user = s2u(socket.id);
+		const player = user?.session?.players.get(socket.id);
 
-		sessionPlayer?.removeInput(key);
+		player?.removeInput(key);
 	});
 });
 

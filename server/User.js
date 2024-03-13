@@ -1,4 +1,4 @@
-export default class Player {
+export default class User {
 	constructor(socket, name) {
 		this.avatar = "avatars/Corsair.jpg";
 		this.crew = null;
