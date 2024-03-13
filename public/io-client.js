@@ -1,5 +1,5 @@
 import { io } from "https://cdn.socket.io/4.7.4/socket.io.esm.min.js";
-import Corsairs from "../../corsairs/Corsairs.js";
+import Corsairs from "../corsairs/Corsairs.js";
 
 const URL = "http://localhost:2137";
 //const URL = `http://${host}:3000`;

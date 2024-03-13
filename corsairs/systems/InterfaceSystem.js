@@ -2,7 +2,7 @@ import Corsairs from "../Corsairs.js";
 import InputManager from "../managers/InputManager.js";
 import TouchManager from "../managers/TouchManager.js";
 import Input from "../enums/Input.js"
-import { socket } from "/script/io-client.js";
+import { socket } from "/io-client.js";
 import ControllerType from "../enums/ControllerType.js";
 
 // TODO: rename to InputSystem (client-side only reminder)

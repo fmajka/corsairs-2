@@ -1,10 +1,11 @@
-import { app } from "./app.js";
-import htmx from "./htmx.js"
+import { app } from "./server/app.js";
+import htmx from "./server/htmx.js"
+import io from "./server/io-server.js";
+import { s2p } from "./server/state.js";
 
-import io from "./io-server.js";
 import CorsairsServer from "./corsairs/CorsairsServer.js";
 import Player from "./corsairs/components/Player.js";
-import { s2p } from "./server/State.js";
+
 
 app.use("/htmx", htmx);
 

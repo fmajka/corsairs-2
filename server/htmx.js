@@ -1,6 +1,5 @@
 import express from "express";
-import { crews, getCrewById, playerCreateCrew, playerLeaveCrew, c2p } from "./server/State.js";
-import io from "./io-server.js";
+import { crews, getCrewById, playerCreateCrew, playerLeaveCrew, c2p } from "./state.js";
 
 const router = express.Router();
 

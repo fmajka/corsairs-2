@@ -1,7 +1,7 @@
 import { Server } from "socket.io";
-import { createPlayer, deletePlayer, getRandomName, s2p } from "./server/State.js";
+import { createPlayer, deletePlayer, getRandomName, s2p } from "./state.js";
 import { server } from "./app.js";
-import CorsairsServer from "./corsairs/CorsairsServer.js";
+import CorsairsServer from "../corsairs/CorsairsServer.js";
 
 // IO stuff
 const io = new Server(server);

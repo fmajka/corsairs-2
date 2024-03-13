@@ -1,6 +1,5 @@
 import Corsairs from "../Corsairs.js";
 import Player from "../components/Player.js"
-import { socket } from "/script/io-client.js";
 
 export default class InputManager {
 
@@ -16,23 +15,11 @@ export default class InputManager {
 	static add(input) {
 		this.inputs.set(input, "pressed");
 		this.controller.addInput(input);
-
-		return;
-
-		if(Corsairs.session.multiplayer) {
-			socket.emit("keyDown", input);
-		}	
 	}
 
 	static remove(input) {
 		this.inputs.set(input, "released");
 		this.controller.removeInput(input);
-
-		return;
-
-		if(Corsairs.session.multiplayer) {
-			socket.emit("keyUp", input);	
-		}
 	}
 
 	static move(event) {
