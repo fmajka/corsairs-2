@@ -37,7 +37,7 @@ export default class CorsairsServer {
 		let session = null;
 		// User's session should be mapped to their socketId?
 		if(!this.sessions.has(socketId)) {
-			session = new CorsairsSessionServer(socketId)
+			session = new CorsairsSessionServer(socketId);
 			this.sessions.set(socketId, session);
 			console.log(`Created new session for ${socketId}`);
 		}

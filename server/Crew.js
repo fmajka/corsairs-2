@@ -3,6 +3,7 @@ export default class Crew {
 
 	constructor(user) {
 		this.id = Crew.id++;
+		this.captain = user;
 		this.mates = [user];
 
 		this.name = `Załoga ${user.name}`;

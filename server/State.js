@@ -74,15 +74,21 @@ function userCreateCrew(player) {
 }
 
 function userLeaveCrew(player) {
-	if(!player.crew) { return; }
 	const crew = player.crew;
-	player.crew = null;
+	if(!crew) { return; }
 
+	player.crew = null;
 	arrRemoveItem(crew.mates, player);
+	// Crew with no members, is it lonely?
 	if(crew.count() == 0) {
 		arrRemoveItem(crews, crew);
 		return false;
 	}
+	// New captain - first guy from the list
+	if(crew.captain == player) {
+		crew.captain = crew.mates[0];
+	}
+
 	return true;
 }
 

@@ -98,11 +98,15 @@ export default class InterfaceSystem {
 					if(key == correspondingKey) {
 						if(change == "pressed") {
 							player.addInput(action);
-							socket.emit("corsairs-keydown", action);
+							if(Corsairs.session.multiplayer) {
+								socket.emit("corsairs-keydown", action);
+							}
 						}
 						else {
 							player.removeInput(action);
-							socket.emit("corsairs-keyup", action);
+							if(Corsairs.session.multiplayer) {
+								socket.emit("corsairs-keyup", action);
+							}
 						}  
 					}
 

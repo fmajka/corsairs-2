@@ -25,6 +25,7 @@ CorsairsServer.init(io)
 		if(!crew) { return console.log("CorsiarsServer.onStart", !!crew); }
 
 		// Init server-side players from the party
+		session.players.clear();
 		for(const crewmate of crew.mates) {
 			crewmate.session = session;
 

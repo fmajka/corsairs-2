@@ -28,10 +28,11 @@ io.sockets.on('connection', socket => {
 		}
 
 		// Return and send notification if someone else than the party owner tries to start the game
-		// if(player !== crew.owner) {
-				//return ChatHandler.notifyById("error", `Tylko kapitan załogi może rozpocząć grę`, socket.id);
-				// TODO: chat system, notifyCrew
-		// }
+		if(user !== crew.captain) {
+			// TODO: chat system, notifyCrew
+			return;
+			//return ChatHandler.notifyById("error", `Tylko kapitan załogi może rozpocząć grę`, socket.id);
+		}
 
 		// Send info to all the party members
 		for(const crewmate of crew.mates) {

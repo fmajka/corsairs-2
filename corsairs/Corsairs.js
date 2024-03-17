@@ -37,7 +37,7 @@ export default class Corsairs {
 		EntityShip: EntityShip
 	};
 
-	// Socket now passed as mount argument
+	// Socket has to be set from the outside
 	static socket = null;
 
 	// Local game session
@@ -55,7 +55,7 @@ export default class Corsairs {
 	static loaded = false;
 
 	// Attach game-related elements to a wrapper & initialize stuff...
-	static async mount(wrapperQuery, socket) {
+	static async mount(wrapperQuery) {
 		this.wrapper = document.querySelector(wrapperQuery);
 		let canvas = document.createElement("canvas");
 		let overlay = document.createElement("div");
@@ -71,9 +71,6 @@ export default class Corsairs {
 		
 		Corsairs.ctx = canvas.getContext("2d");
 		resizeCanvas();
-
-		// Multiplayer capabilities
-		this.socket = socket;
 
 		this.mounted = true;
 
@@ -179,10 +176,14 @@ export default class Corsairs {
 	}
 
 	// Starts up / resets the game
-	static start() {
+	static start(multiplayer) {
 		if(!this.loaded) {
 			console.log("Corsairs still loading...");
 			return;
+		}
+		
+		if(multiplayer !== undefined) {
+			this.session.multiplayer = multiplayer
 		}
 
 		const gameType = (window.innerWidth > window.innerHeight) ? "classic" : "mobile";

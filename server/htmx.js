@@ -94,4 +94,9 @@ router.get("/crew-lobby", (req, res) => {
 	res.render('includes/crew-lobby', { crew: user.crew });
 });
 
+router.get("/training-lobby", (req, res) => {
+	const user = c2u(req.headers.cookie);
+	res.render('includes/training-lobby', { user });
+});
+
 export default router;

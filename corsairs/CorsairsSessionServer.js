@@ -23,8 +23,6 @@ export default class CorsairsSessionServer extends CorsairsSession {
 
 		this.socketId = socketId;
 		this.serverSide = true;
-		// Now started is CorsairsServer
-		//this.start();
 	}
 
 	// Adds game data to the packetBuffer
@@ -53,10 +51,6 @@ export default class CorsairsSessionServer extends CorsairsSession {
 
 		// Resets game state & creates starting entities
 		super.start(gameType);
-
-		// TODO: shouldn't be necessary
-		// Set additional props
-		// this.alivePlayers = party.members.size;
 	}
 
 	// End the game and free the players when they are defeated

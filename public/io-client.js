@@ -7,6 +7,7 @@ export const socket = io(URL);
 
 socket.on("connect", () => {
 	console.log("Connected!");
+	Corsairs.socket = socket;
 });
 
 socket.on("disconnect", () => {
