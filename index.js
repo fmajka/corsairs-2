@@ -6,6 +6,14 @@ import { s2u } from "./server/state.js";
 import CorsairsServer from "./corsairs/CorsairsServer.js";
 import Player from "./corsairs/components/Player.js";
 
+import admin from "firebase-admin";
+import serviceAccount from "./local/korsarze-2-firebase-key.json" assert { type: "json" };
+
+const { credential } = admin;
+
+admin.initializeApp({
+  credential: credential.cert(serviceAccount)
+});
 
 app.use("/htmx", htmx);
 

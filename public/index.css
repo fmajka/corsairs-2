@@ -46,9 +46,19 @@ h2 {
 
 button {
 	border: none;
+	background-color: var(--darkwood);
 	color: var(--cloth);
 	cursor: pointer;
 	font-family: "PirataOne";
+}
+
+input {
+	background: transparent;
+	border-color: var(--darkwood);
+	border-width: 0 0 2px 0;
+	color: var(--darkwood);
+	font-family: "Default";
+	outline: none;
 }
 
 .capitalize::first-letter { text-transform:capitalize; }

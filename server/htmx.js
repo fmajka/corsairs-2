@@ -1,5 +1,9 @@
 import express from "express";
 import { crews, getCrewById, userCreateCrew, userLeaveCrew, c2u } from "./state.js";
+import { getAuth } from "firebase-admin/auth";
+
+import { auth } from "./firebase.js";
+import { signInWithEmailAndPassword } from "firebase/auth";
 
 const router = express.Router();
 
@@ -97,6 +101,32 @@ router.get("/crew-lobby", (req, res) => {
 router.get("/training-lobby", (req, res) => {
 	const user = c2u(req.headers.cookie);
 	res.render('includes/training-lobby', { user });
+});
+
+router.get("/topbar-info", (req, res) => {
+	const user = c2u(req.headers.cookie);
+	res.render('includes/topbar-info', { user });
+});
+
+router.get("/topbar-login", (req, res) => {
+	const user = c2u(req.headers.cookie);
+	res.render('includes/topbar-login', { user });
+});
+
+router.post("/topbar-login", (req, res) => {
+	console.log("Cookie:", req.headers.cookie)
+	const user = c2u(req.headers.cookie);
+	const { email, password } = req.body;
+	console.log("topbar-login post:", email, password);
+
+	signInWithEmailAndPassword(auth, email, password)
+	.then((res) => {
+		console.log("Verified", res.user.email);
+		user.name = res.user.email;
+	})
+	.catch(err => console.log(err));
+
+	res.render('includes/topbar-login', { user });
 });
 
 export default router;

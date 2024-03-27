@@ -1,0 +1,6 @@
+.input-row.login
+	input(type="email" name="email")
+	button.rounded(type="submit" hx-post="/htmx/topbar-login" hx-target=".player>.info") L
+.input-row.password
+	input(type="password" name="password")
+	button.rounded.bg-grey(hx-get="/htmx/topbar-info" hx-target=".player>.info") X

@@ -1,0 +1,4 @@
+span#player-name= user && user.name || "No name"
+.btn-row
+	button.rounded(hx-get="/htmx/topbar-login" hx-target=".player>.info") Login
+	button.rounded Register
