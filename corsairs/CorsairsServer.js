@@ -55,8 +55,9 @@ export default class CorsairsServer {
 		
 		const session = this.sessions.get(socketId);
 		this.sessions.delete(socketId);
-		// TODO: see if this works properly
-		session.end();
+		if(!session.gameOver) {
+			session.end();
+		}
 	}
 
 	// Request game tick

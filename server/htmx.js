@@ -1,9 +1,9 @@
 import express from "express";
-import { crews, getCrewById, userCreateCrew, userLeaveCrew, c2u } from "./state.js";
-import { getAuth } from "firebase-admin/auth";
+import { crews, getCrewById, userCreateCrew, userLeaveCrew, c2u, getRandomName } from "./state.js";
 
 import { auth } from "./firebase.js";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { refStats } from "./firebase-admin.js";
 
 const router = express.Router();
 
@@ -103,14 +103,16 @@ router.get("/training-lobby", (req, res) => {
 	res.render('includes/training-lobby', { user });
 });
 
-router.get("/topbar-info", (req, res) => {
+////////////
+// Topbar //
+////////////
+router.get("/topbar-profile", (req, res) => {
 	const user = c2u(req.headers.cookie);
-	res.render('includes/topbar-info', { user });
+	res.render('includes/topbar-profile', { user });
 });
 
 router.get("/topbar-login", (req, res) => {
-	const user = c2u(req.headers.cookie);
-	res.render('includes/topbar-login', { user });
+	res.render('includes/topbar-login');
 });
 
 router.post("/topbar-login", (req, res) => {
@@ -120,13 +122,57 @@ router.post("/topbar-login", (req, res) => {
 	console.log("topbar-login post:", email, password);
 
 	signInWithEmailAndPassword(auth, email, password)
-	.then((res) => {
-		console.log("Verified", res.user.email);
-		user.name = res.user.email;
+	.then(r => {
+		console.log("Verified", email);
+		user.name = r.user.displayName;
+		user.uid = r.user.uid;
+		res.render('includes/topbar-profile', { user });
 	})
-	.catch(err => console.log(err));
+	.catch(err => {
+		console.log(err);
+		res.render('includes/topbar-login');
+	});
+});
 
-	res.render('includes/topbar-login', { user });
+router.get("/topbar-register", (req, res) => {
+	res.render('includes/topbar-register');
+});
+
+router.post("/topbar-register", (req, res) => {
+	console.log("Cookie:", req.headers.cookie)
+	const user = c2u(req.headers.cookie);
+	const { email, password } = req.body;
+	console.log("topbar-register post:", email, password);
+
+	createUserWithEmailAndPassword(auth, email, password)
+	.then(r => {
+		// Set name to email's first part
+		const displayName = email.split("@")[0];
+		updateProfile(r.user, { displayName });
+
+		// Insert player stats document to firestore
+		refStats.doc(r.user.uid).set({
+			score: 0,
+			highscore: 0,
+		});
+
+		console.log("User created", email, displayName);
+		user.name = displayName;
+		user.uid = r.user.uid;
+		res.render('includes/topbar-profile', { user });
+	})
+	.catch(err => {
+		console.log(err);
+		res.render('includes/topbar-login');
+	});
+});
+
+router.post("/topbar-logout", (req, res) => {
+	console.log("Cookie:", req.headers.cookie)
+	const user = c2u(req.headers.cookie);
+	user.name = getRandomName();
+	user.uid = null;
+	res.render('includes/topbar-profile', { user });
 });
 
 export default router;

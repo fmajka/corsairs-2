@@ -1,0 +1,7 @@
+form
+	.row
+		input(type="email" name="email" placeholder="email" tabindex="1")
+		button.rounded(type="submit" hx-post="/htmx/topbar-register" hx-target=".player-wrapper > .info" tabindex="3") R
+	.row
+		input(type="password" name="password" placeholder="password" tabindex="2")
+		button.rounded.bg-grey(hx-get="/htmx/topbar-profile" hx-target=".player-wrapper > .info" tabindex="4") X

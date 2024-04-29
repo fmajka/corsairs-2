@@ -1,6 +1,7 @@
-.input-row.login
-	input(type="email" name="email")
-	button.rounded(type="submit" hx-post="/htmx/topbar-login" hx-target=".player>.info") L
-.input-row.password
-	input(type="password" name="password")
-	button.rounded.bg-grey(hx-get="/htmx/topbar-info" hx-target=".player>.info") X
+form
+	.row
+		input(type="email" name="email" tabindex="1")
+		button.rounded(type="submit" hx-post="/htmx/topbar-login" hx-target=".player-wrapper > .info" tabindex="3") L
+	.row
+		input(type="password" name="password" tabindex="2")
+		button.rounded.bg-grey(hx-get="/htmx/topbar-profile" hx-target=".player-wrapper > .info" tabindex="4") X

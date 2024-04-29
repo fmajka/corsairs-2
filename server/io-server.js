@@ -25,6 +25,7 @@ io.sockets.on('connection', socket => {
 
 		if(!user || !crew) {
 			console.log("io/corsairs-start: ", !!user, !!crew);
+			return;
 		}
 
 		// Return and send notification if someone else than the party owner tries to start the game

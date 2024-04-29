@@ -7,5 +7,7 @@ export default class User {
 
 		// When a CorsairsSessionServer is going, this is set
 		this.session = null;
+		// Firebase user ID
+		this.uid = null;
 	}
 }

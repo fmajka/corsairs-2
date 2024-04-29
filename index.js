@@ -6,14 +6,8 @@ import { s2u } from "./server/state.js";
 import CorsairsServer from "./corsairs/CorsairsServer.js";
 import Player from "./corsairs/components/Player.js";
 
-import admin from "firebase-admin";
-import serviceAccount from "./local/korsarze-2-firebase-key.json" assert { type: "json" };
-
-const { credential } = admin;
-
-admin.initializeApp({
-  credential: credential.cert(serviceAccount)
-});
+import { FieldPath } from "firebase-admin/firestore";
+import { refStats } from "./server/firebase-admin.js";
 
 app.use("/htmx", htmx);
 
@@ -48,9 +42,30 @@ CorsairsServer.init(io)
 	
 		// TODO: actually submit score
 		console.log("Submitted score:", session.score);
+		const uids = [];
 		for(const crewmate of crew.mates) {
 			crewmate.session = null;
+			if(crewmate.uid) { uids.push(crewmate.uid); }
 		}
+		if(uids.length == 0) { return; }
+		
+		// Update stats
+		refStats.where(FieldPath.documentId(), "in", uids).get()
+		.then(snapshot => {
+			const docs = [];
+			for(const doc of snapshot.docs) { docs.push({ uid: doc.id, ...doc.data() }); }
+
+			for(const doc of docs) {
+				const updated = { 
+					score: doc.score + session.score,
+					highscore: Math.max(doc.highscore, session.score),
+				}
+				console.log(updated);
+				refStats.doc(doc.uid).update(updated);
+			}
+		})
+		.catch(err => console.log(err));
+	
 	});
 
 CorsairsServer.start();

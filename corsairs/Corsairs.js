@@ -152,7 +152,7 @@ export default class Corsairs {
 		
 		// Prevent spacebar from triggering start button and restarting the game
 		const input = document.getElementById("ready-btn");
-		input.blur();
+		input?.blur();
 
 		// TODO: this is pretty random
 		InputManager.controller.inputs.clear();

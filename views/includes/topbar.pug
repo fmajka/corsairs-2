@@ -8,8 +8,7 @@
 		.title.menu-item.h-100p(hx-get="/htmx/main-menu" hx-target="#view")
 			h1 KORSARZE
 
-
-	.player.bg-cloth.rounded.h-100p
+	.player-wrapper.bg-cloth.rounded.h-100p
 		#player-avatar.avatar
-		form.info
-			include ./topbar-info
+		#player-info.info
+			include ./topbar-profile
