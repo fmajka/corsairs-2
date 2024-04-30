@@ -46,7 +46,7 @@ export default class InterfaceSystem {
 				player.everTouched = player.touching = true;
 			}
 			if(Corsairs.session.multiplayer) {
-				socket.emit("touchStarted", TouchManager.touchOrigin);
+				socket.emit("corsairs-touchstart", TouchManager.touchOrigin);
 			}
 			TouchManager.touchStarted = false;
 		}
@@ -58,7 +58,7 @@ export default class InterfaceSystem {
 				player.touchPos.y = TouchManager.touchPos.y;
 			}
 			if(Corsairs.session.multiplayer) {
-				socket.emit("touchMoved", TouchManager.touchPos);
+				socket.emit("corsairs-touchmove", TouchManager.touchPos);
 			}
 			TouchManager.touchMoved = false;
 		}
@@ -69,7 +69,7 @@ export default class InterfaceSystem {
 				player.touching = false;
 			}
 			if(Corsairs.session.multiplayer) {
-				socket.emit("touchEnded", {});
+				socket.emit("corsairs-touchend", {});
 			}
 			TouchManager.touchEnded = false;
 		}

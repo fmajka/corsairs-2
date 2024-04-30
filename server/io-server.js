@@ -64,6 +64,35 @@ io.sockets.on('connection', socket => {
 
 		player?.removeInput(key);
 	});
+
+	// EXPERIMENTAL: mobile gaming
+	socket.on("corsairs-touchstart", touchPos => {
+		const user = s2u(socket.id);
+		const player = user?.session?.players.get(socket.id);
+
+		if(player) {
+			player.touchPos.x = player.touchOrigin.x = touchPos.x;
+			player.touchPos.y = player.touchOrigin.y = touchPos.y;
+			player.everTouched = player.touching = true;
+		}
+	});
+	socket.on("corsairs-touchmove", touchPos => {
+		const user = s2u(socket.id);
+		const player = user?.session?.players.get(socket.id);
+
+		if(player) {
+			player.touchPos.x = touchPos.x;
+			player.touchPos.y = touchPos.y;
+		}
+	});
+	socket.on("corsairs-touchend", _ => {
+		const user = s2u(socket.id);
+		const player = user?.session?.players.get(socket.id);
+
+		if(player) {
+			player.touching = false;
+		}
+	});
 });
 
 export default io;

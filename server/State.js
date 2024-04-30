@@ -1,3 +1,4 @@
+import CorsairsServer from "../corsairs/CorsairsServer.js";
 import Crew from "./Crew.js";
 import User from "./User.js";
 
@@ -12,7 +13,7 @@ const socketMap = new Map(); // Map socket ids to User objects
  * @param {any} item - Item to remove from the array
  * */
 const arrRemoveItem = (arr, item) => {
-	var index = arr.indexOf(item);
+	const index = arr.indexOf(item);
   if (index > -1) { arr.splice(index, 1); }
 }
 
@@ -77,6 +78,10 @@ function userLeaveCrew(player) {
 	const crew = player.crew;
 	if(!crew) { return; }
 
+	if(player.socket) {
+		CorsairsServer.endSession(player.socket.id);
+	}
+
 	player.crew = null;
 	arrRemoveItem(crew.mates, player);
 	// Crew with no members, is it lonely?
@@ -92,11 +97,13 @@ function userLeaveCrew(player) {
 	return true;
 }
 
-function deleteUser(player) {
-	usernameMap.delete(player.name);
-	socketMap.delete(player.socket.id);
-	if(player.crew) {
-		userLeaveCrew(player)
+function deleteUser(user) {
+	usernameMap.delete(user.name);
+	socketMap.delete(user.socket.id);
+	if(user.crew) {
+		const crewId = user.crew.id;
+		userLeaveCrew(user);
+		user.socket.broadcast.emit("crew-change", { id: crewId });
 	}
 }
 

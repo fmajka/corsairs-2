@@ -2,7 +2,7 @@
 .topbar {
 	position: relative;
 	display: flex;
-	height: 100px;
+	height: var(--topbar-height);
 	justify-content: center;
 	padding: 0.5rem;
 	width: 100%;
@@ -246,4 +246,29 @@
 			font-size: 1.4rem;
 		}
 	}
+}
+
+/* GAME */
+#game-controls {
+	box-sizing: border-box;
+	display: flex;
+	gap: 1rem;
+	height: var(--topbar-height);
+	justify-content: center;
+	padding: 0.5rem;
+	position: absolute;
+	top: 0;
+	width: 100%;
+	z-index: 668;
+
+	& > button {
+		font-size: 2.5rem;
+		letter-spacing: 1px;
+		line-height: 1em;
+		width: 100%;
+	}
+}
+
+@media (min-width: 1025px) {
+	#game-controls { display: none; }
 }

@@ -122,10 +122,10 @@ router.post("/topbar-login", (req, res) => {
 	console.log("topbar-login post:", email, password);
 
 	signInWithEmailAndPassword(auth, email, password)
-	.then(r => {
+	.then(cred => {
 		console.log("Verified", email);
-		user.name = r.user.displayName;
-		user.uid = r.user.uid;
+		user.name = cred.user.displayName;
+		user.uid = cred.user.uid;
 		res.render('includes/topbar-profile', { user });
 	})
 	.catch(err => {
@@ -145,25 +145,25 @@ router.post("/topbar-register", (req, res) => {
 	console.log("topbar-register post:", email, password);
 
 	createUserWithEmailAndPassword(auth, email, password)
-	.then(r => {
+	.then(cred => {
 		// Set name to email's first part
 		const displayName = email.split("@")[0];
-		updateProfile(r.user, { displayName });
+		updateProfile(cred.user, { displayName });
 
 		// Insert player stats document to firestore
-		refStats.doc(r.user.uid).set({
+		refStats.doc(cred.user.uid).set({
 			score: 0,
 			highscore: 0,
 		});
 
 		console.log("User created", email, displayName);
 		user.name = displayName;
-		user.uid = r.user.uid;
+		user.uid = cred.user.uid;
 		res.render('includes/topbar-profile', { user });
 	})
 	.catch(err => {
 		console.log(err);
-		res.render('includes/topbar-login');
+		res.render('includes/topbar-register');
 	});
 });
 

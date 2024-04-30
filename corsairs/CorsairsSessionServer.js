@@ -8,9 +8,6 @@ import SetEntitySpritePacket from "./packets/SetEntitySpritePacket.js";
 
 import CorsairsServer from "./CorsairsServer.js";
 
-// TODO: I would prefer not to import external modules...
-const socketManager = {};
-
 export default class CorsairsSessionServer extends CorsairsSession {
 	// Id of this session's owner
 	socketId;

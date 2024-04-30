@@ -1,9 +1,11 @@
-import { io } from "https://cdn.socket.io/4.7.4/socket.io.esm.min.js";
+//import { io } from "https://cdn.socket.io/4.7.4/socket.io.esm.min.js";
+// import { io } from "socket.io-client";
 import Corsairs from "../corsairs/Corsairs.js";
 
-const URL = "http://localhost:2137";
+//const URL = "http://localhost:2137";
+//const URL = "http://192.168.50.61:2137";
 //const URL = `http://${host}:3000`;
-export const socket = io(URL);
+export const socket = io();
 
 socket.on("connect", () => {
 	console.log("Connected!");
@@ -34,7 +36,6 @@ socket.on("socket-id", ({id, name, avatar}) => {
 socket.on("crew-change", ({id}) => {
 	// Update tavern list's target attribute
 	const el = document.querySelector(".tavern-list");
-	console.log(el)
 	if(el) {
 		const crewId = `#crew-${id}`;
 		const target = el.querySelector(crewId);

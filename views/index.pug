@@ -3,9 +3,13 @@ html
 
 head
 	meta(charset="UTF-8")
+	//- meta(content="width=device-width,initial-scale=1" name="viewport")
 	<!-- HTMX CDN -->
 	script(src="https://unpkg.com/htmx.org@1.9.10")
-	script(src="https://cdn.socket.io/socket.io-3.0.1.min.js")
+	script(src="/socket.io/socket.io.js")
+	
+	<!--script(src="/socket.io/socket.io.js")-->
+
 	script(type="module" src="/io-client.js")
 	script(type="module" src="/corsairs/Corsairs.js")
 	
@@ -17,6 +21,9 @@ head
 
 body
 	div(id="game-wrapper" style="display: none;")
+		#game-controls.bg-wood
+			button.rounded.restart RE:START
+			button.rounded.leave.bg-grey KONIEC
 
 	include ./includes/topbar
 
@@ -27,4 +34,6 @@ body
 script(type="module").
 	window.onload = () => {
 		Corsairs.mount("#game-wrapper");
+		document.querySelector("#game-controls > .restart").addEventListener("click", _ => Corsairs.start())
+		document.querySelector("#game-controls > .leave").addEventListener("click", _ => Corsairs.leave())
 	}
