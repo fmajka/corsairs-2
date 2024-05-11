@@ -36,10 +36,18 @@ function s2u(socketId) {
 	return socketMap.get(socketId);
 }
 
-function c2u(cookie) {
+function c2u(cookieStr) {
 	// TODO: what if no cookie?
-	const socketId = cookie.split("=").slice(1).join("=");
-	return s2u(socketId);
+	const cookies = cookieStr.split(";");
+	// Find the right cookie
+	for(const cookie of cookies) {
+		const parts = cookie.trim().split("=");
+		if(parts[0] == "id") {
+			const socketId = parts.slice(1).join("=");
+			return s2u(socketId);
+		}
+	}
+	return null;
 }
 
 function createUser(socket, name) {
@@ -56,7 +64,7 @@ function getRandomName() {
 	let name = "";
 	do {
 		const id = Math.floor(100 + Math.random() * 900);
-		name = `Corsair${id}`;
+		name = `Korsarz${id}`;
 	} while(usernameMap.has(name));
 	return name;
 }

@@ -16,7 +16,7 @@ app.get("/", (_, res) => {
 });
 
 app.post("/socket-id", (req, res) => {
-	console.log("Sending cookie with id: ", req.body);
+	console.log("Sending cookie: ", req.body);
 	res.cookie("id", req.body.id);
 	res.send("Cookie Set");
 });
