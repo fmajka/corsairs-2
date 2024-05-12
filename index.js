@@ -1,5 +1,4 @@
 import { app } from "./server/app.js";
-import htmx from "./server/htmx.js"
 import io from "./server/io-server.js";
 import { s2u } from "./server/state.js";
 
@@ -9,16 +8,8 @@ import Player from "./corsairs/components/Player.js";
 import { FieldPath } from "firebase-admin/firestore";
 import { refStats } from "./server/firebase-admin.js";
 
-app.use("/htmx", htmx);
-
 app.get("/", (_, res) => {
 	res.render("index");
-});
-
-app.post("/socket-id", (req, res) => {
-	console.log("Sending cookie: ", req.body);
-	res.cookie("id", req.body.id);
-	res.send("Cookie Set");
 });
 
 CorsairsServer.init(io)

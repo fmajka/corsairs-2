@@ -1,6 +1,7 @@
 import CorsairsServer from "../corsairs/CorsairsServer.js";
 import Crew from "./Crew.js";
 import User from "./User.js";
+import { io } from "./app.js";
 
 // Party system
 const crews = [];
@@ -109,14 +110,38 @@ function deleteUser(user) {
 	usernameMap.delete(user.name);
 	socketMap.delete(user.socket.id);
 	if(user.crew) {
-		const crewId = user.crew.id;
+		const crew = user.crew;
 		userLeaveCrew(user);
-		user.socket.broadcast.emit("crew-change", { id: crewId });
+		emitCrewChange(crew);
 	}
+}
+
+///////////////
+// Emitting! //
+///////////////
+
+function emitCrewChange(crew, target = null) {
+	const crewData = { id: crew.id, crew: crew.serialize() };
+	if(target) { 
+		io.to(target).emit("crew-change", crewData); 
+	}
+	else {
+		io.emit("crew-change", crewData); 
+	}
+}
+
+function emitUserChange(user) {
+	io.to(user.socket.id).emit("user-change", { auth: !!user.uid, avatar: user.avatar, name: user.name });
+	if(user.crew) { emitCrewChange(user.crew); }
+}
+
+function emitViewToSocket(view, socket) {
+	io.to(socket.id).emit("view-change", view);
 }
 
 export { 
 	crews, 
 	c2u, s2u, getUser, getCrewById, getRandomName,
 	createUser, deleteUser, userCreateCrew, userLeaveCrew,
+	emitCrewChange, emitUserChange, emitViewToSocket
 }

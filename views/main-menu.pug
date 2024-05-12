@@ -1,10 +1,10 @@
 #main-menu(x-show="$store.router.is($el.id)")
 	.pillar.bg-darkwood.shade-b
-	.menu-item(@click="$store.router.setView('tavern')")
-		h2 Tawerna
+	button.menu-item(@click="$store.router.setView('tavern')")
+		h2 Speluna
 
-	.menu-item(@click="$store.router.setView('lobby-training')")
-		h2 Tawerna
+	button.menu-item(@click="$store.router.setView('lobby-training')")
+		h2 Zaprawa
 
-	.menu-item()
+	button.menu-item()
 		h2 Ranking

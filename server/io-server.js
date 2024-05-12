@@ -1,31 +1,17 @@
-import { Server } from "socket.io";
-import { createUser, crews, deleteUser, getCrewById, getRandomName, s2u, userCreateCrew, userLeaveCrew } from "./state.js";
-import { server } from "./app.js";
+
+import { createUser, crews, deleteUser, getCrewById, getRandomName, s2u, userCreateCrew, userLeaveCrew, emitCrewChange, emitUserChange, emitViewToSocket } from "./state.js";
+import { io } from "./app.js";
 import CorsairsServer from "../corsairs/CorsairsServer.js";
+import { auth } from "./firebase.js";
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { refStats } from "./firebase-admin.js";
 
 // IO stuff
-const io = new Server(server);
-
-function emitCrewChange(crew, target = null) {
-	const crewData = { id: crew.id, crew: crew.serialize() };
-	if(target) { 
-		io.to(target).emit("crew-change", crewData); 
-	}
-	else {
-		io.emit("crew-change", crewData); 
-	}
-}
-
-function emitViewToSocket(view, socket) {
-	io.to(socket.id).emit("view-change", view);
-}
-
 io.sockets.on('connection', (socket) => {
 	console.log(`${socket.id} connected!`);
 
 	const user = createUser(socket, getRandomName());
-	io.to(socket.id).emit("socket-id", {
-		id: socket.id, 
+	io.to(socket.id).emit("init", {
 		name: user.name, 
 		avatar: user.avatar
 	});
@@ -38,6 +24,10 @@ io.sockets.on('connection', (socket) => {
 		console.log(`${socket.id} disconnected!`);
 		deleteUser(s2u(socket.id));
 	});
+
+	////////////
+	// Client //
+	////////////
 
 	socket.on("client:onCrewButton", _ => {
 		const user = s2u(socket.id);
@@ -89,6 +79,57 @@ io.sockets.on('connection', (socket) => {
 		}
 		emitViewToSocket("tavern", socket);
 	});
+
+	socket.on("client:onUserSubmit", ({type, email, password}) => {
+		const user = s2u(socket.id);
+		console.log("io-server @onUserSubmit:", email, password);
+
+		if(type === "register") {
+			createUserWithEmailAndPassword(auth, email, password)
+			.then((cred) => {
+				// Set name to email's first part
+				const displayName = email.split("@")[0];
+				updateProfile(cred.user, { displayName });
+		
+				// Insert player stats document to firestore
+				refStats.doc(cred.user.uid).set({
+					score: 0,
+					highscore: 0,
+				});
+		
+				console.log("User created:", email, displayName);
+				user.name = displayName;
+				user.uid = cred.user.uid;
+				emitUserChange(user);
+			})
+			.catch((err) => { console.log(err.message); });
+		}
+		else if(type === "login") {
+			signInWithEmailAndPassword(auth, email, password)
+			.then((cred) => {
+				console.log("Verified:", email);
+				user.name = cred.user.displayName;
+				user.uid = cred.user.uid;
+				emitUserChange(user);
+			})
+			.catch((err) => { console.log(err.message); });
+		}
+		else {
+			console.log("Unknown submit type:", type);
+		}
+
+	});
+
+	socket.on("client:onUserLogout", _ => {
+		const user = s2u(socket.id);
+		user.name = getRandomName();
+		user.uid = null;
+		emitUserChange(user);
+	});
+
+	//////////////
+	// Corsairs //
+	//////////////
 
 	// Start a Corsairs game session on the server for the client
 	socket.on("corsairs-start", ({ gameType }) => {
@@ -148,6 +189,7 @@ io.sockets.on('connection', (socket) => {
 			player.everTouched = player.touching = true;
 		}
 	});
+
 	socket.on("corsairs-touchmove", (touchPos) => {
 		const user = s2u(socket.id);
 		const player = user?.session?.players.get(socket.id);
@@ -157,6 +199,7 @@ io.sockets.on('connection', (socket) => {
 			player.touchPos.y = touchPos.y;
 		}
 	});
+	
 	socket.on("corsairs-touchend", _ => {
 		const user = s2u(socket.id);
 		const player = user?.session?.players.get(socket.id);

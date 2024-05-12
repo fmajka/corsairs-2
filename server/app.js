@@ -1,4 +1,5 @@
 import express from "express";
+import { Server } from "socket.io";
 
 const app = express();
 
@@ -14,4 +15,6 @@ const server = app.listen(2137, () => {
 	console.log("Korsarze żeglują do portu 2137!");
 });
 
-export { app, server }
+const io = new Server(server);
+
+export { app, server, io }

@@ -1,0 +1,7 @@
+form(x-show="$store.form.type" @submit.prevent="$store.form.submit()" @keydown="if(event.key === 'Escape') $store.form.setType(null); event.stopPropagation()")
+	.row
+		input(type="email" name="email" placeholder="E-mail" tabindex="1" x-model="$store.form.email")
+		button.rounded(type="submit" tabindex="3" x-text="$store.form.label")
+	.row
+		input(type="password" name="password" placeholder="Hasło" tabindex="2" x-model="$store.form.password")
+		button.rounded.bg-grey(type="button" tabindex="4" @click="$store.form.setType(null)") X

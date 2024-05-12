@@ -1,7 +1,15 @@
-import Corsairs from "../corsairs/Corsairs.js";
+import Corsairs from "../../corsairs/Corsairs.js";
 
 //const URL = "http://localhost:2137";
 export const socket = io();
+
+function setUser(auth, name, avatar) {
+	const user = Alpine.store("user");
+	user.auth = auth;
+	user.name = name;
+	if(avatar) { user.avatar = avatar; }
+	return user;
+}
 
 socket.on("connect", () => {
 	console.log("Connected!");
@@ -13,28 +21,19 @@ socket.on("disconnect", () => {
 });
 
 // Cookies!
-socket.on("socket-id", ({id, name, avatar}) => {
+socket.on("init", ({name, avatar}) => {
+	const user = setUser(false, name, avatar);
 
-	console.log(id);
-	Alpine.store("user").name = name;
-	Alpine.store("user").avatar = avatar;
-	// Reset some local props
-	Alpine.store("user").crew = null;
+	// Reset some local alpine store props
+	user.crew = null;
 	Alpine.store("crews", []);
-
-	fetch("/socket-id", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-		body: JSON.stringify({id})
-  });
 });
 
-socket.on("user-change", ({name, avatar}) => {
-	console.log("Change!", name, avatar);
-	Alpine.store("user").name = name;
-	if(avatar) { Alpine.store("user").avatar = avatar; }
+socket.on("user-change", ({auth, name, avatar}) => {
+	setUser(auth, name, avatar);
+	const form = Alpine.store("form");
+	form.setType(null);
+	form.email = form.password = "";
 })
 
 // UI updates
@@ -53,13 +52,11 @@ socket.on("crew-change", ({id, crew}) => {
 	const crews = Alpine.store("crews");
 	for(let i = 0; i < crews.length; i++) {
 		if(crews[i].id === id) {
-			console.log("Crew spliced: ", update, crew)
 			return update ? crews[i] = crew : crews.splice(i, 1);
 		}
 	}
 
 	// Insert new crew as it doesn't exist yet
-	console.log("Crew update pushed");
 	crews.push(crew);
 });
 

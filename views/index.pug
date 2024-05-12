@@ -4,24 +4,18 @@ html
 head
 	meta(charset="UTF-8")
 
-	<!-- SOCKET.IO LIBRARY -->
 	script(defer src="/socket.io/socket.io.js")
-	script(defer type="module" src="/io-client.js")
-	script(defer type="module" src="/alpine.js")
-		<!-- ALPINE CDN -->
-	script(defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.13.10/dist/cdn.min.js")
-	<!-- HTMX CDN -->
-	script(defer src="https://unpkg.com/htmx.org@1.9.10")
-	
+	script(defer type="module" src="/js/index.js")
+	script(defer src="/js/alpine.min.js")
 	script(defer type="module" src="/corsairs/Corsairs.js")
 	
-	link(rel="stylesheet" href="/index.css")
-	link(rel="stylesheet" href="/includes.css")
+	link(rel="stylesheet" href="/css/index.css")
+	link(rel="stylesheet" href="/css/includes.css")
 	link(rel="stylesheet" href="/corsairs/corsairs.css")
 
 	title Korsarze Online 2
 
-body
+body(onkeydown="processHotkey(event.key)")
 	div(id="game-wrapper" style="display: none;")
 		#game-controls.bg-wood
 			button.rounded.restart RE:START

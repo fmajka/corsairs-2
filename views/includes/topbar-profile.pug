@@ -1,8 +1,6 @@
-.profile
+.profile(x-show="!$store.form.type")
 	span#player-name(x-text="$store.user.name")
 	.btn-row
-		if !user || !(user.uid)
-			button.rounded(hx-get="/htmx/topbar-login" hx-target=".player-wrapper > .info") Login
-			button.rounded(hx-get="/htmx/topbar-register" hx-target=".player-wrapper > .info") Register
-		else
-			button.rounder(hx-post="/htmx/topbar-logout" hx-target=".player-wrapper > .info") Logout
+		button.rounded(x-show="$store.user.auth" @click="$store.emit('onUserLogout')") Wyloguj
+		button.rounded(x-show="!($store.user.auth)" @click="$store.form.setType('login')") Logowanie
+		button.rounded(x-show="!($store.user.auth)" @click="$store.form.setType('register')") Rejestracja

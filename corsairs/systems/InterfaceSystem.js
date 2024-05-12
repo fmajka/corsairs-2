@@ -2,7 +2,6 @@ import Corsairs from "../Corsairs.js";
 import InputManager from "../managers/InputManager.js";
 import TouchManager from "../managers/TouchManager.js";
 import Input from "../enums/Input.js"
-import { socket } from "/io-client.js";
 import ControllerType from "../enums/ControllerType.js";
 
 // TODO: rename to InputSystem (client-side only reminder)
@@ -31,7 +30,7 @@ export default class InterfaceSystem {
 				}
 				// Send updates to the server if online
 				if(Corsairs.session.multiplayer) {
-					socket.emit("mouseMoved", InputManager.controller.mousePos);
+					Corsairs.socket.emit("mouseMoved", InputManager.controller.mousePos);
 				}
 
 				InputManager.mouseMoved = false;
@@ -46,7 +45,7 @@ export default class InterfaceSystem {
 				player.everTouched = player.touching = true;
 			}
 			if(Corsairs.session.multiplayer) {
-				socket.emit("corsairs-touchstart", TouchManager.touchOrigin);
+				Corsairs.socket.emit("corsairs-touchstart", TouchManager.touchOrigin);
 			}
 			TouchManager.touchStarted = false;
 		}
@@ -58,7 +57,7 @@ export default class InterfaceSystem {
 				player.touchPos.y = TouchManager.touchPos.y;
 			}
 			if(Corsairs.session.multiplayer) {
-				socket.emit("corsairs-touchmove", TouchManager.touchPos);
+				Corsairs.socket.emit("corsairs-touchmove", TouchManager.touchPos);
 			}
 			TouchManager.touchMoved = false;
 		}
@@ -69,7 +68,7 @@ export default class InterfaceSystem {
 				player.touching = false;
 			}
 			if(Corsairs.session.multiplayer) {
-				socket.emit("corsairs-touchend", {});
+				Corsairs.socket.emit("corsairs-touchend", {});
 			}
 			TouchManager.touchEnded = false;
 		}
@@ -99,13 +98,13 @@ export default class InterfaceSystem {
 						if(change == "pressed") {
 							player.addInput(action);
 							if(Corsairs.session.multiplayer) {
-								socket.emit("corsairs-keydown", action);
+								Corsairs.socket.emit("corsairs-keydown", action);
 							}
 						}
 						else {
 							player.removeInput(action);
 							if(Corsairs.session.multiplayer) {
-								socket.emit("corsairs-keyup", action);
+								Corsairs.socket.emit("corsairs-keyup", action);
 							}
 						}  
 					}

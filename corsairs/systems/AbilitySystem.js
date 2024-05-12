@@ -78,8 +78,6 @@ export default class AbilitySystem {
 		projectile.parentId = entity.id;
 	}
 
-	static #finishAbility(session, abilityId, casterId) {
-		console.log(casterId + " finished " + abilityId);
-	}
+	static #finishAbility(session, abilityId, casterId) {}
 
 }

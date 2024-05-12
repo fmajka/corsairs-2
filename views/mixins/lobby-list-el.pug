@@ -1,11 +1,11 @@
-mixin lobby-list-el(training)
+mixin lobby-list-el(offline)
 	.list-element
-		- const url = training ? "$store.user.avatar" : "mate?.avatar ?? ''";
+		- const url = offline ? "$store.user.avatar" : "mate?.avatar ?? ''";
 		- const style = "`background-image: url(${" + url + "})`";
 		.avatar.shade-b(x-bind:style=style)
 
 		.separator.bg-amber.rounded.shade-b
 		
 		.player-info.bg-cloth.shade-b
-			- const name = training ? "$store.user.name" : "mate?.name ?? 'Puste'"
+			- const name = offline ? "$store.user.name" : "mate?.name ?? 'Puste'"
 			span.name.txt-amber(x-text=name)

@@ -18,21 +18,22 @@
 
 @font-face {
   font-family: "PirataOne";
-  src: local("PirataOne"), url(./fonts/PirataOne/PirataOne-Regular.ttf) format("truetype");
+  src: local("PirataOne"), url(../fonts/PirataOne/PirataOne-Regular.ttf) format("truetype");
 }
 
 @font-face {
   font-family: "Default";
-  src: local("Besley"), url(./fonts/Besley/Besley-VariableFont_wght.ttf) format("truetype");
+  src: local("Besley"), url(../fonts/Besley/Besley-VariableFont_wght.ttf) format("truetype");
 }
 
 body {
-  background: linear-gradient(134.38deg, #5448C8 11.84%, #60B2E5 87.42%);
+  background: linear-gradient(135deg, #5448C8 15%, #60B2E5 85%);
   height: 100dvh;
   margin: 0;
 }
 
 h1, h2, h3, h4, h5, h6 {
+	color: var(--amber);
 	font-family: "PirataOne";
 	font-weight: 400;
 	margin: 0;
