@@ -1,5 +1,5 @@
 .profile
-	span#player-name= user && user.name || "No name"
+	span#player-name(x-text="$store.user.name")
 	.btn-row
 		if !user || !(user.uid)
 			button.rounded(hx-get="/htmx/topbar-login" hx-target=".player-wrapper > .info") Login

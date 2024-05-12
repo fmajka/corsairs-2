@@ -5,10 +5,12 @@ import { auth } from "./firebase.js";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { refStats } from "./firebase-admin.js";
 
+import io from "./io-server.js";
+
 const router = express.Router();
 
 router.get("/main-menu", (_, res) => {
-	res.render('includes/main-menu');
+	res.render('main-menu');
 });
 
 router.post("/crew-change", (req, res) => {
@@ -17,11 +19,11 @@ router.post("/crew-change", (req, res) => {
 	const crew = getCrewById(crewId);
 
 	if(type === "crew") {
-		res.render("includes/crew-list", {crew});
+		res.render("includes/lobby-list", {crew});
 	}
 	else if(type === "tavern") {
 		if(!crew) res.send("");
-		else res.render("includes/tavern-member", {crew});
+		else res.render("includes/tavern-el", {crew});
 	}
 	else {
 		res.end();
@@ -34,7 +36,7 @@ router.get("/crew-add", (req, res) => {
 
 	if(crew && crew.slotsMax < 5) {
 		crew.slotsMax++;
-		res.render('includes/crew-member', { user: null });
+		res.render('includes/lobby-list-el', { user: null });
 		user.socket.broadcast.emit("crew-change", { id: crew.id });
 	}
 	else {
@@ -59,13 +61,13 @@ router.post("/crew-join", (req, res) => {
 		}
 		user.crew = crew;
 		crew.mates[slot] = user;
-		res.render('includes/crew-lobby', { crew });
+		res.render('lobby-crew', { crew });
 
 		// Update other users' UI
 		user.socket.broadcast.emit("crew-change", { id: crew.id });
 	}
 	else {
-		res.render('includes/tavern-list', { user, crews });
+		res.render('tavern', { user, crews });
 	}
 });
 
@@ -74,19 +76,19 @@ router.get("/crew-leave", (req, res) => {
 	const crew = user.crew;
 
 	userLeaveCrew(user);
-	res.render('includes/tavern-list', { user, crews });
+	res.render('tavern', { user, crews });
 
 	// Update other users' UI
 	user.socket.broadcast.emit("crew-change", { id: crew.id }); 
 });
 
-router.get("/tavern-list", (req, res) => {
+router.get("/tavern", (req, res) => {
 	const user = c2u(req.headers.cookie);
 
-	res.render('includes/tavern-list', { user, crews });
+	res.render('tavern', { user, crews });
 });
 
-router.get("/crew-lobby", (req, res) => {
+router.get("/lobby-crew", (req, res) => {
 	const user = c2u(req.headers.cookie);
 
 	if(!user.crew) {
@@ -95,12 +97,12 @@ router.get("/crew-lobby", (req, res) => {
 		// Update other users' UI
 		user.socket.broadcast.emit("crew-change", { id: user.crew.id }); 
 	}
-	res.render('includes/crew-lobby', { crew: user.crew });
+	res.render('lobby-crew', { crew: user.crew });
 });
 
-router.get("/training-lobby", (req, res) => {
+router.get("/lobby-training", (req, res) => {
 	const user = c2u(req.headers.cookie);
-	res.render('includes/training-lobby', { user });
+	res.render('lobby-training', { user });
 });
 
 ////////////
@@ -126,6 +128,7 @@ router.post("/topbar-login", (req, res) => {
 		console.log("Verified", email);
 		user.name = cred.user.displayName;
 		user.uid = cred.user.uid;
+		io.to(user.socket.id).emit("user-change", { name: user.name });
 		res.render('includes/topbar-profile', { user });
 	})
 	.catch(err => {
@@ -159,6 +162,7 @@ router.post("/topbar-register", (req, res) => {
 		console.log("User created", email, displayName);
 		user.name = displayName;
 		user.uid = cred.user.uid;
+		io.to(user.socket.id).emit("user-change", { name: user.name });
 		res.render('includes/topbar-profile', { user });
 	})
 	.catch(err => {
@@ -172,6 +176,7 @@ router.post("/topbar-logout", (req, res) => {
 	const user = c2u(req.headers.cookie);
 	user.name = getRandomName();
 	user.uid = null;
+	io.to(user.socket.id).emit("user-change", { name: user.name });
 	res.render('includes/topbar-profile', { user });
 });
 

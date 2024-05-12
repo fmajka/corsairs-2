@@ -1,0 +1,30 @@
+#tavern(x-show="$store.router.is($el.id)")
+	<!-- hx-target, hx-swap & hx-vals updated dynamically via websockets -->
+	.list.tavern-list
+		| Crew list
+		template(x-for="crew in $store.crews")
+			//- No longer needs an ID
+			.list-element
+
+				.left.rounded.shade-b
+					span.txt-amber.capitalize(x-text="crew.mode")
+					span.txt-amber(x-text="`${crew.mates.length} / ${crew.slotsMax}`") 
+
+				.separator.bg-amber.rounded.shade-b
+				
+				.right.rounded.shade-b
+					span.txt-amber(x-text="crew.name")
+					.avatars
+						//- List crewmates
+						template(x-for="mate in crew.mates")
+							.avatar(x-bind:style="`background-image: url('${mate.avatar}')`")
+						//- List empty slots
+						template(x-for="slot in crew.slotsMax - crew.mates.length")
+							.avatar(@click="$store.emit('onCrewJoin', crew.id)")
+
+	.br-buttons
+		//-button.bg-darkwood.shade-b(@click="$store.router.setView('lobby-crew')")
+		button.bg-darkwood.shade-b(@click="$store.emit('onCrewButton')")
+			span(x-text="$store.user.crew ? 'MOJA ZAŁOGA' : 'STWÓRZ ZAŁOGĘ'")
+
+		button.bg-grey.shade-b(@click="$store.router.setView('main-menu')") POWRÓT

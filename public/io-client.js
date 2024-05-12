@@ -1,10 +1,6 @@
-//import { io } from "https://cdn.socket.io/4.7.4/socket.io.esm.min.js";
-// import { io } from "socket.io-client";
 import Corsairs from "../corsairs/Corsairs.js";
 
 //const URL = "http://localhost:2137";
-//const URL = "http://192.168.50.61:2137";
-//const URL = `http://${host}:3000`;
 export const socket = io();
 
 socket.on("connect", () => {
@@ -18,10 +14,13 @@ socket.on("disconnect", () => {
 
 // Cookies!
 socket.on("socket-id", ({id, name, avatar}) => {
-	console.log(id);
 
-	document.getElementById("player-name").innerHTML = name;
-	document.getElementById("player-avatar").style.backgroundImage = `url('${avatar}')`;
+	console.log(id);
+	Alpine.store("user").name = name;
+	Alpine.store("user").avatar = avatar;
+	// Reset some local props
+	Alpine.store("user").crew = null;
+	Alpine.store("crews", []);
 
 	fetch("/socket-id", {
     method: "POST",
@@ -32,28 +31,41 @@ socket.on("socket-id", ({id, name, avatar}) => {
   });
 });
 
-// UI updates
-socket.on("crew-change", ({id}) => {
-	// Update tavern list's target attribute
-	const el = document.querySelector(".tavern-list");
-	if(el) {
-		const crewId = `#crew-${id}`;
-		const target = el.querySelector(crewId);
+socket.on("user-change", ({name, avatar}) => {
+	console.log("Change!", name, avatar);
+	Alpine.store("user").name = name;
+	if(avatar) { Alpine.store("user").avatar = avatar; }
+})
 
-		if(target) {
-			el.setAttribute("hx-target", crewId);
-			el.setAttribute("hx-swap", "outerHTML");
-		}
-		else {
-			el.setAttribute("hx-target", "this");
-			el.setAttribute("hx-swap", "beforeend");
-		}
-		el.setAttribute("hx-vals", `{"type": "tavern", "crewId": ${id}}`);
+// UI updates
+socket.on("crew-change", ({id, crew}) => {
+	if(!crew) { return console.log("io-client @crew-change: null crew"); }
+	const update = crew.mates.length > 0; // !update == delete
+	
+	const user = Alpine.store("user");
+	if(!update && crew.id === user.crew?.id) {
+		user.crew = null; // User's crew deleted
+	}
+	else if(crew.mates.some(mate => mate.name === user.name)) {
+		user.crew = crew; // User now belongs to an updated crew
 	}
 	
-	document.body.dispatchEvent(new CustomEvent("crew-change"));
-	console.log(`Crew ${id} changed!`)
+	const crews = Alpine.store("crews");
+	for(let i = 0; i < crews.length; i++) {
+		if(crews[i].id === id) {
+			console.log("Crew spliced: ", update, crew)
+			return update ? crews[i] = crew : crews.splice(i, 1);
+		}
+	}
+
+	// Insert new crew as it doesn't exist yet
+	console.log("Crew update pushed");
+	crews.push(crew);
 });
+
+socket.on("view-change", view => {
+	Alpine.store("router").setView(view);
+})
 
 // Game updates
 socket.on("corsairs-run", ({gameType}) => {

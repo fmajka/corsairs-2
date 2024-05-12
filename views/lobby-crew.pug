@@ -1,0 +1,17 @@
+include mixins/lobby-list-el
+
+#lobby-crew(x-show="$store.router.is($el.id)")
+	.game-lobby
+		| Lobby
+		template(x-if="$store.user.crew")
+			.list.player-list
+				template(x-for="mate in Array(...$store.user.crew.mates, ...Array($store.user.crew.slotsMax - $store.user.crew.mates.length))")
+					+lobby-list-el(false)
+
+		button.add.bg-darkwood.rounded.shade-b(@click="$store.emit('onCrewAdd')") +
+
+		.lobby-settings
+
+	.br-buttons
+		button#ready-btn.bg-darkwood.shade-b(onclick="Corsairs.start(true)" onkeyup="event.preventDefault()") GOTOWY!
+		button.bg-grey.shade-b(@click="$store.emit('onCrewLeave')") OPUŚĆ ZAŁOGĘ

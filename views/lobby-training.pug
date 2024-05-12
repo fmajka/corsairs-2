@@ -1,0 +1,15 @@
+include mixins/lobby-list-el
+
+#lobby-training(x-show="$store.router.is($el.id)")
+	.game-lobby
+		| Trening
+		.list.player-list
+			+lobby-list-el(true)
+
+		//- button.add.bg-darkwood.rounded.shade-b(hx-get="/htmx/crew-add" hx-target=".player-list" hx-swap="beforeend") +
+
+		.lobby-settings
+
+	.br-buttons
+		button#ready-btn.bg-darkwood.shade-b(onclick="Corsairs.start(false)" onkeyup="event.preventDefault()") TRENING!
+		button.bg-grey.shade-b(@click="$store.router.setView('main-menu')") POWRÓT

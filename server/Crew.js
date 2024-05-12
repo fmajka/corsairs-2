@@ -14,4 +14,18 @@ export default class Crew {
 	count() {
 		return this.mates.length;
 	}
+
+	// Serialized crews sent to clients to see the state locally
+	serialize() {
+		return {
+			id: this.id,
+			mates: this.mates.map(mate => ({
+				avatar: mate.avatar,
+				name: mate.name
+			})),
+			name: this.name,
+			mode: this.mode,
+			slotsMax: this.slotsMax
+		}
+	}
 }

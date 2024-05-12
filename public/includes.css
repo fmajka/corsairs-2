@@ -122,7 +122,7 @@
 	top: -5rem;
 }
 
-.main-menu {
+#main-menu {
 	display: flex;
 	flex-direction: column;
 	gap: 2.5rem;
@@ -193,7 +193,7 @@
 }
 
 /* CREW LOBBY */
-.crew-lobby {
+.game-lobby {
 
 	display: flex;
 	flex-direction: column;

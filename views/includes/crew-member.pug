@@ -1,9 +1,0 @@
-.list-element
-	- const url = user ? user.avatar : "";
-	.avatar.shade-b(style={"background-image": `url('${url}')`})
-
-	.separator.bg-amber.rounded.shade-b
-	
-	.player-info.bg-cloth.shade-b
-		- const name = user?.name ?? "Puste"
-		span.name.txt-amber= name
