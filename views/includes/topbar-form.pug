@@ -1,4 +1,4 @@
-form(x-show="$store.form.type" @submit.prevent="$store.form.submit()" @keydown="if(event.key === 'Escape') $store.form.setType(null); event.stopPropagation()")
+form(x-cloak x-show="$store.form.type" @submit.prevent="$store.form.submit()" @keydown="$store.form.onkeydown(event)")
 	.row
 		input(type="email" name="email" placeholder="E-mail" tabindex="1" x-model="$store.form.email")
 		button.rounded(type="submit" tabindex="3" x-text="$store.form.label")

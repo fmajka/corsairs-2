@@ -31,7 +31,6 @@ CorsairsServer.init(io)
 		const crew = s2u(session.socketId)?.crew;
 		if(!crew) { return console.log("CorsiarsServer.onEnd", !!crew); }
 	
-		// TODO: actually submit score
 		console.log("Submitted score:", session.score);
 		const uids = [];
 		for(const crewmate of crew.mates) {

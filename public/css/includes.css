@@ -272,3 +272,59 @@
 @media (min-width: 1025px) {
 	#game-controls { display: none; }
 }
+
+/* RANKING */
+#ranking {
+	& > .ranking-list {
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
+		max-width: 730px;
+
+		& .ranking-row {
+			align-items: center;
+			background-color: var(--cloth);
+			border-radius: 25px;
+			display: flex;
+			gap: 0.75rem;
+			height: 3rem;
+			padding-right: 1rem;
+
+			& .avatar {
+				align-self: center;
+				border: solid var(--amber);
+				border-width: 2px 0 2px 2px;
+				border-radius: 25px 0 0 25px;
+				flex-shrink: 0;
+				max-height: 3rem;
+				width: 3rem;
+			}
+
+			& .separator {
+				background-color: var(--amber);
+				width: 1.5rem; 
+			}
+
+			& > div {
+				color: var(--amber);
+				display: flex;
+				font-size: 1.2rem;
+				justify-content: center;
+
+				&:nth-child(1) {
+					flex: 0 0;
+					height: calc(100% + 10px);
+					width: 4.5rem;
+				}
+
+				&:nth-child(2) {
+					flex-basis: 100%;
+				}
+
+				&:nth-child(3), &:nth-child(4) {
+					flex-basis: 35%;
+				}
+			}
+		}
+	}
+}

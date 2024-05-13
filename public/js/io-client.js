@@ -60,8 +60,12 @@ socket.on("crew-change", ({id, crew}) => {
 	crews.push(crew);
 });
 
-socket.on("view-change", view => {
+socket.on("view-change", (view) => {
 	Alpine.store("router").setView(view);
+});
+
+socket.on("stats-change", (stats) => {
+	Alpine.store("stats").data = stats;
 })
 
 // Game updates

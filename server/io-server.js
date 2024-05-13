@@ -1,5 +1,5 @@
 
-import { createUser, crews, deleteUser, getCrewById, getRandomName, s2u, userCreateCrew, userLeaveCrew, emitCrewChange, emitUserChange, emitViewToSocket } from "./state.js";
+import { createUser, crews, deleteUser, getCrewById, getRandomName, s2u, userCreateCrew, userLeaveCrew, emitCrewChange, emitUserChange, emitViewToSocket, getStats } from "./state.js";
 import { io } from "./app.js";
 import CorsairsServer from "../corsairs/CorsairsServer.js";
 import { auth } from "./firebase.js";
@@ -88,13 +88,15 @@ io.sockets.on('connection', (socket) => {
 			createUserWithEmailAndPassword(auth, email, password)
 			.then((cred) => {
 				// Set name to email's first part
-				const displayName = email.split("@")[0];
-				updateProfile(cred.user, { displayName });
+				let displayName = email.split("@")[0];
+				displayName = displayName[0].toUpperCase() + displayName.slice(1);
+				//updateProfile(cred.user, { displayName });
 		
 				// Insert player stats document to firestore
 				refStats.doc(cred.user.uid).set({
 					score: 0,
 					highscore: 0,
+					name: displayName,
 				});
 		
 				console.log("User created:", email, displayName);
@@ -108,6 +110,7 @@ io.sockets.on('connection', (socket) => {
 			signInWithEmailAndPassword(auth, email, password)
 			.then((cred) => {
 				console.log("Verified:", email);
+				// TODO: maybe fetch it from database instead?
 				user.name = cred.user.displayName;
 				user.uid = cred.user.uid;
 				emitUserChange(user);
@@ -126,6 +129,12 @@ io.sockets.on('connection', (socket) => {
 		user.uid = null;
 		emitUserChange(user);
 	});
+
+	socket.on("client:onStats", async () => {
+		const stats = (await getStats()).sort((a, b) => b.highscore - a.highscore);
+		console.log(stats);
+		io.to(socket.id).emit("stats-change", stats);
+	})
 
 	//////////////
 	// Corsairs //

@@ -1,6 +1,6 @@
 include mixins/lobby-list-el
 
-#lobby-training(x-show="$store.router.is($el.id)")
+#lobby-training(x-cloak x-show="$store.router.is($el.id)")
 	.game-lobby
 		| Trening
 		.list.player-list

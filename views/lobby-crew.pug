@@ -1,6 +1,6 @@
 include mixins/lobby-list-el
 
-#lobby-crew(x-show="$store.router.is($el.id)")
+#lobby-crew(x-cloak x-show="$store.router.is($el.id)")
 	.game-lobby
 		| Lobby
 		template(x-if="$store.user.crew")

@@ -18,13 +18,15 @@
 
 @font-face {
   font-family: "PirataOne";
-  src: local("PirataOne"), url(../fonts/PirataOne/PirataOne-Regular.ttf) format("truetype");
+  src: local("PirataOne"), url(../fonts/PirataOne/PirataOne-Regular.woff2) format("truetype");
 }
 
 @font-face {
   font-family: "Default";
-  src: local("Besley"), url(../fonts/Besley/Besley-VariableFont_wght.ttf) format("truetype");
+  src: local("Besley"), url(../fonts/Besley/Besley-VariableFont_wght.woff2) format("truetype");
 }
+
+[x-cloak] { display: none !important; }
 
 body {
   background: linear-gradient(135deg, #5448C8 15%, #60B2E5 85%);

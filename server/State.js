@@ -2,6 +2,8 @@ import CorsairsServer from "../corsairs/CorsairsServer.js";
 import Crew from "./Crew.js";
 import User from "./User.js";
 import { io } from "./app.js";
+import { getDocs } from "firebase/firestore";
+import { statsRef } from "./firebase.js";
 
 // Party system
 const crews = [];
@@ -37,19 +39,20 @@ function s2u(socketId) {
 	return socketMap.get(socketId);
 }
 
-function c2u(cookieStr) {
-	// TODO: what if no cookie?
-	const cookies = cookieStr.split(";");
-	// Find the right cookie
-	for(const cookie of cookies) {
-		const parts = cookie.trim().split("=");
-		if(parts[0] == "id") {
-			const socketId = parts.slice(1).join("=");
-			return s2u(socketId);
-		}
-	}
-	return null;
-}
+// TODO: remove
+// function c2u(cookieStr) {
+// 	// TODO: what if no cookie?
+// 	const cookies = cookieStr.split(";");
+// 	// Find the right cookie
+// 	for(const cookie of cookies) {
+// 		const parts = cookie.trim().split("=");
+// 		if(parts[0] == "id") {
+// 			const socketId = parts.slice(1).join("=");
+// 			return s2u(socketId);
+// 		}
+// 	}
+// 	return null;
+// }
 
 function createUser(socket, name) {
 	const player = new User(socket, name);
@@ -139,9 +142,24 @@ function emitViewToSocket(view, socket) {
 	io.to(socket.id).emit("view-change", view);
 }
 
+///////////////
+// Database! //
+///////////////
+
+async function getStats() {
+	try {
+		const snapshot = await getDocs(statsRef);
+		return snapshot.docs.map((doc) => ({ ...doc.data() }));
+	} catch(err) {
+		console.log(err.message);
+		return [];
+	}
+}
+
 export { 
 	crews, 
-	c2u, s2u, getUser, getCrewById, getRandomName,
+	s2u, getCrewById, getRandomName,
 	createUser, deleteUser, userCreateCrew, userLeaveCrew,
-	emitCrewChange, emitUserChange, emitViewToSocket
+	emitCrewChange, emitUserChange, emitViewToSocket,
+	getStats
 }

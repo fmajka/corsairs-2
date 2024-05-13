@@ -1,0 +1,13 @@
+#ranking(x-cloak x-show="$store.router.is($el.id)")
+	.ranking-list
+		template(x-for="data in $store.stats.data")
+			.ranking-row.shade-b
+				div.avatar-wrapper
+					.avatar(style="background-image: url('/avatars/Corsair.jpg')")
+					.separator.shade-b
+				div(x-text="data.name")
+				div(x-text="data.score")
+				div(x-text="data.highscore")
+
+	.br-buttons
+		button.bg-grey.shade-b(@click="$store.router.setView('main-menu')") POWRÓT

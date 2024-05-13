@@ -1,26 +1,37 @@
 
 
+
 import { socket } from "./io-client.js";
 
 // Functions
-window.processHotkey = (key) => {
-	key = key.toLowerCase();
-
-	for(const button of Alpine.store("buttons")) {
-		if(Corsairs.session.running) { return; }
-
-		if(key === "escape" && button.checkVisibility() && button.classList.contains("bg-grey")) {
-			return button.click();
-		}
-		else if(button.checkVisibility() && key === button.innerText[0]?.toLowerCase()) {
-			return button.click();
+(function() {
+	const buttons = document.querySelectorAll("button");
+	window.processHotkey = (key) => {
+		key = key.toLowerCase();
+	
+		for(const button of buttons) {
+			if(Corsairs.session.running) { return; }
+	
+			if(key === "escape" && button.checkVisibility() && button.classList.contains("bg-grey")) {
+				return button.click();
+			}
+			else if(button.checkVisibility() && key === button.innerText[0]?.toLowerCase()) {
+				return button.click();
+			}
 		}
 	}
-}
+})();
 
 // Alpine
 document.addEventListener("alpine:init", () => {
-	Alpine.store("buttons", document.querySelectorAll("button"));
+
+	// TODO: no need, just emit onclick
+	Alpine.store("stats", {
+		data: [],
+		getStats() {
+			Alpine.store("emit")("onStats");
+		}
+	});
 
 	Alpine.store("form", {
 		type: null,
@@ -39,17 +50,24 @@ document.addEventListener("alpine:init", () => {
 				password: this.password
 			});
 		},
-		submit2(formData) {
-			const data = Object.fromEntries(formData.entries());
-			data.type = this.type;
-			Alpine.store("emit")("onUserSubmit", data);
-		},
+		onkeydown(event) {
+			if(event.key === "Escape") {
+				this.form.setType(null);
+			}  
+			event.stopPropagation();
+		}
 	});
 	
 	Alpine.store("router", {
 		view: "main-menu",
 		is(view) { return this.view == view; },
-		setView(view) { this.view = view; },
+		setView(view) { 
+			this.view = view;
+			// Exceptions:
+			if(view === "ranking") {
+				Alpine.store("emit")("onStats");
+			}
+		},
 	});
 
 	Alpine.store("user", {
