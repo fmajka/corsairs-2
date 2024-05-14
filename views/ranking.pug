@@ -1,13 +1,18 @@
 #ranking(x-cloak x-show="$store.router.is($el.id)")
 	.ranking-list
-		template(x-for="data in $store.stats.data")
-			.ranking-row.shade-b
-				div.avatar-wrapper
+		.row.heading
+			button.cell.shade-b.refresh(@click="$store.stats.get()")
+			button.cell.shade-b(@click="$store.stats.sort('name')") Gracz
+			button.cell.shade-b(@click="$store.stats.sort('score')") Wynik
+			button.cell.shade-b(@click="$store.stats.sort('highscore')") Rekord
+		template(x-for="data in $store.stats.data" :key="data.name")
+			.row.item.shade-b
+				div.cell.avatar-wrapper
 					.avatar(style="background-image: url('/avatars/Corsair.jpg')")
 					.separator.shade-b
-				div(x-text="data.name")
-				div(x-text="data.score")
-				div(x-text="data.highscore")
+				div.cell(x-text="data.name")
+				div.cell(x-text="data.score")
+				div.cell(x-text="data.highscore")
 
 	.br-buttons
 		button.bg-grey.shade-b(@click="$store.router.setView('main-menu')") POWRÓT

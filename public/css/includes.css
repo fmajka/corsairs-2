@@ -281,40 +281,23 @@
 		gap: 1rem;
 		max-width: 730px;
 
-		& .ranking-row {
+		& .row {
 			align-items: center;
-			background-color: var(--cloth);
 			border-radius: 25px;
 			display: flex;
 			gap: 0.75rem;
 			height: 3rem;
-			padding-right: 1rem;
 
-			& .avatar {
-				align-self: center;
-				border: solid var(--amber);
-				border-width: 2px 0 2px 2px;
-				border-radius: 25px 0 0 25px;
-				flex-shrink: 0;
-				max-height: 3rem;
-				width: 3rem;
-			}
-
-			& .separator {
-				background-color: var(--amber);
-				width: 1.5rem; 
-			}
-
-			& > div {
-				color: var(--amber);
+			/* common for table heading and list elements */
+			& > .cell {
 				display: flex;
 				font-size: 1.2rem;
 				justify-content: center;
 
 				&:nth-child(1) {
+					border-radius: 25px 0 0 25px !important;
 					flex: 0 0;
-					height: calc(100% + 10px);
-					width: 4.5rem;
+					flex-basis: 4.5rem;
 				}
 
 				&:nth-child(2) {
@@ -322,7 +305,60 @@
 				}
 
 				&:nth-child(3), &:nth-child(4) {
-					flex-basis: 35%;
+					flex-basis: 40%;
+				}
+
+				&:last-child {
+					border-radius: 0 25px 25px 0 !important;
+					padding-right: 0.5rem;
+				}
+			}
+
+			&.heading {
+				align-items: stretch;
+
+				& .refresh {
+					background-image: url("/icons/icon-refresh-128.png");
+					background-size: 48px;
+					background-position: calc(50% + 4px) 50%;
+					background-repeat: no-repeat;
+
+				}
+
+				& > .cell {
+					align-items: center;
+					background-color: var(--darkwood);
+					border-radius: 5px;
+					display: flex;
+					font-size: 1.4rem;
+				}
+			}
+
+			/* list element only */
+			&.item {
+				background-color: var(--cloth);
+
+				& > .cell {
+					color: var(--amber);
+				}
+
+				& .avatar-wrapper {
+					height: calc(100% + 10px);
+				}
+	
+				& .avatar {
+					align-self: center;
+					border: solid var(--amber);
+					border-width: 2px 0 2px 2px;
+					border-radius: 25px 0 0 25px;
+					flex-shrink: 0;
+					max-height: 3rem;
+					width: 3rem;
+				}
+	
+				& .separator {
+					background-color: var(--amber);
+					width: 1.5rem; 
 				}
 			}
 		}

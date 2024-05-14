@@ -1,6 +1,3 @@
-
-
-
 import { socket } from "./io-client.js";
 
 // Functions
@@ -28,8 +25,23 @@ document.addEventListener("alpine:init", () => {
 	// TODO: no need, just emit onclick
 	Alpine.store("stats", {
 		data: [],
-		getStats() {
+		lastKey: "",
+		lastOrder: 1,
+		get() {
 			Alpine.store("emit")("onStats");
+			console.log("Getting stats...");
+		},
+		sort(key) {
+			const isNumber = typeof this.data[0]?.[key] === "number";
+			const order = key === this.lastKey ? (-1 * this.lastOrder) : 1;
+			if(isNumber) {
+				this.data.sort((a,b) => order * (b[key] - a[key]));
+			} 
+			else {
+				this.data.sort((a,b) => order * (a[key] > b[key] ? 1 : -1));
+			}
+			this.lastKey = key;
+			this.lastOrder = order;
 		}
 	});
 
@@ -65,7 +77,7 @@ document.addEventListener("alpine:init", () => {
 			this.view = view;
 			// Exceptions:
 			if(view === "ranking") {
-				Alpine.store("emit")("onStats");
+				Alpine.store("stats").get();
 			}
 		},
 	});
