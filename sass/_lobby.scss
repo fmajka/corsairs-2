@@ -1,0 +1,54 @@
+.game-lobby {
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+
+	& button.add {
+		font-size: 4rem;
+		line-height: 1em;
+		width: 4rem;
+	}
+
+	.player-list {
+		align-items: stretch;
+		display: flex;
+		flex-direction: column;
+		gap: 0.5rem;
+		max-width: 30rem;
+	
+		& > .list-element {
+			min-height: 4.5rem;
+	
+			& > .avatar, & > .player-info {
+				margin: 0.25rem 0;
+			}
+	
+			& > .avatar {
+				border: solid var(--cloth);
+				border-radius: 5px 0 0 5px;
+				border-width: 2px 0 2px 2px;
+				flex-shrink: 0;
+				width: 4rem;
+			}
+	
+			/* TODO: this is duplicated */
+			& > .separator {
+				flex-shrink: 0;
+				min-height: 100%;
+				width: 1.5rem;
+			}
+	
+			& > .player-info {
+				align-items: center;
+				border-radius: 0 5px 5px 0;
+				display: flex;
+				flex-grow: 1;
+				padding-left: 1rem;
+			}
+		}
+	
+		& span {
+			font-size: 1.4rem;
+		}
+	}
+}

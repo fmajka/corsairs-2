@@ -1,0 +1,56 @@
+.tavern-list {
+	display: flex;
+	flex-direction: column;
+	gap: 0.75rem;
+
+	& > .list-element {
+		min-height: 7rem;
+		@media (width < $tablet) { flex-direction: column; }
+
+		& > .left, & > .right {
+			background-color: #8D6346AA;
+			display: flex;
+			gap: 0.5rem;
+			flex-direction: column;
+			justify-content: space-between;
+			margin: 0.25rem 0;
+			@media (width < $tablet) { margin: 0; }
+			padding: 0.75rem 1rem;
+		}
+
+		& > .left {
+			min-width: 12rem;
+			@media (width < $tablet) {
+				flex-direction: row;
+				justify-content: space-between; 
+			}
+		}
+
+		& > .separator {
+			width: 1.5rem;
+		}
+
+		& > .right {
+			flex-grow: 1;
+			border-radius: 0.25rem 0.25rem 5rem 0.25rem;
+
+			& > .avatars {
+				display: flex;
+				gap: 1rem;
+
+				& > .avatar {
+					background-size: cover;
+					border: 2px solid var(--amber);
+					border-radius: 100%;
+					box-sizing: border-box;
+					width: 3rem;
+				}
+			}
+		}
+	}
+
+	& span {
+		font-size: 1.2rem;
+		line-height: 1.2em;
+	}
+}

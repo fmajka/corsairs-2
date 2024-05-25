@@ -1,0 +1,102 @@
+.topbar {
+	position: relative;
+	box-sizing: border-box;
+	display: flex;
+	height: var(--topbar-height);
+	justify-content: space-between;
+	padding: 0.5rem;
+	width: 100%;
+	z-index: 1;
+
+	& > .spacer {
+		flex-shrink: 1; 
+		width: 18rem;
+		@media (width < $desktop) { display: none; }
+	}
+
+	& > .title {
+		padding: 0 2.5rem;
+
+		@media (width < $tablet) {
+			aspect-ratio: 1;
+			background-image: url("/icons/icon-anchor.png");
+			background-position: center;
+			background-repeat: no-repeat;
+			background-size: 48px;
+			image-rendering: pixelated;
+			padding: 0;
+			& > h1 { display: none; }
+		}
+	}
+
+	& > .player-wrapper {
+		align-items: stretch;
+		display: flex;
+		width: 18rem;
+		@media (width < $tablet) { margin-left: auto; }
+
+		& > .avatar {
+			border: 2px solid var(--cloth);
+			border-radius: 5px 0 0 5px;
+			box-sizing: border-box;
+			flex-shrink: 0;
+			width: 4rem;
+		}
+
+		& > .info {
+			padding: 0.5rem 0.75rem 0.25rem;
+			width: 100%;
+
+			& > * {
+				display: flex;
+				height: 100%;
+				justify-content: space-between;
+				width: 100%; 
+			}
+
+			& > .profile {
+				flex-direction: column;
+
+				& > .btn-row {
+					display: flex;
+					gap: 0.5rem;
+					width: 100%;
+	
+					& > button {
+						flex-grow: 1;
+						font-size: 1rem;
+						height: 1.5rem;
+					}
+				}
+			}
+
+			& > form {
+				display: flex;
+				flex-direction: column;
+				gap: 0.5rem;
+
+				& > .row {
+					display: flex;
+					gap: 0.5rem;
+					height: calc(50% - 0.25rem);
+				}
+
+				& button {
+					aspect-ratio: 1;
+					font-size: 1rem;
+					height: 100%;
+				}
+
+				& input {
+					flex-grow: 1;
+					font-size: 0.8rem;
+				}
+			}
+		}
+
+		& span {
+			color: var(--amber);
+			line-height: 1.25em;
+		}
+	}
+}

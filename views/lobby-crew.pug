@@ -12,6 +12,6 @@ include mixins/lobby-list-el
 
 		.lobby-settings
 
-	.br-buttons
+	.nav-buttons
 		button#ready-btn.bg-darkwood.shade-b(onclick="Corsairs.start(true)" onkeyup="event.preventDefault()") GOTOWY!
-		button.bg-grey.shade-b(@click="$store.emit('onCrewLeave')") OPUŚĆ ZAŁOGĘ
+		button.bg-grey.shade-b(@click="$store.emit('onCrewLeave')") OPUŚĆ

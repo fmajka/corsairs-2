@@ -1,0 +1,158 @@
+$desktop: 1025px;
+$tablet: 768px;
+
+@mixin flex-center {
+	align-items: center;
+	display: flex;
+	justify-content: center;
+}
+
+:root {
+	--view-pad: 3rem 3rem 2rem 3rem;
+	@media (width < $desktop) {--view-pad: 2rem;}
+	@media (width < $tablet) {--view-pad: 1rem;}
+	/**/
+	--amber: #D88B46;
+	--cloth: #FFE99D;
+	--darkwood: #834848;
+	--grey: #444;
+	--wood: #8D6346;
+
+	--rounded: 0.25rem;
+	--shade-b: 0px 4px 4px rgba(0, 0, 0, 0.25);
+
+	--topbar-height: 5rem;
+
+	color: var(--amber);
+	font-family: "Default";
+	font-size: 20px;
+	@media (width < $tablet) { font-size: 15px; }
+}
+
+@font-face {
+  font-family: "PirataOne";
+  src: local("PirataOne"), url("../fonts/PirataOne/PirataOne-Regular.woff2") format("truetype");
+}
+
+@font-face {
+  font-family: "Default";
+  src: local("Besley"), url("../fonts/Besley/Besley-VariableFont_wght.woff2") format("truetype");
+}
+
+[x-cloak] { display: none !important; }
+
+body {
+  background: linear-gradient(135deg, #5448C8 15%, #60B2E5 85%);
+  height: 100dvh;
+  margin: 0;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	color: var(--amber);
+	font-family: "PirataOne";
+	font-weight: 400;
+	margin: 0;
+}
+
+h1 { font-size: 2.4rem; }
+
+h2 { font-size: 2rem; }
+
+button {
+	border: none;
+	background-color: var(--darkwood);
+	color: var(--cloth);
+	cursor: pointer;
+	font-family: "PirataOne";
+}
+
+input {
+	background: transparent;
+	border-color: var(--darkwood);
+	border-width: 0 0 2px 0;
+	color: var(--darkwood);
+	font-family: "Default";
+	outline: none;
+}
+
+.capitalize::first-letter { text-transform:capitalize; }
+
+.bg-amber { background-color: var(--amber); }
+.bg-cloth { background-color: var(--cloth); }
+.bg-darkwood { background-color: var(--darkwood); }
+.bg-grey { background-color: var(--grey); }
+.bg-wood { background-color: var(--wood); }
+
+.txt-amber { color: var(--amber); }
+
+.rounded { border-radius: var(--rounded); }
+
+.shade-b { box-shadow: var(--shade-b); }
+
+/* Common */
+#view {
+	margin: var(--view-pad);
+	// margin: 3rem 3rem 2rem 3rem;
+	// @media (width < $desktop) { margin: 2rem; }
+	// @media (width < $tablet) { margin: 1rem; }
+}
+
+.menu-item {
+	@include flex-center;
+
+	background-color: var(--cloth);
+	border-radius: var(--rounded);
+	box-shadow: var(--shade-b);
+	z-index: 1;
+	&:hover { cursor: pointer; }
+}
+
+.avatar {
+	aspect-ratio: 1;
+	background-size: cover;
+	background-position: center;
+}
+
+/* GENERIC LIST */
+.list {
+	& > .list-element { display: flex; }
+	& .separator { min-height: 100%; }
+}
+
+/* BOTTOM-RIGHT BUTTONS */
+.nav-buttons {
+	position: absolute;
+	bottom: 1.5rem;
+	left: 50%;
+	translate: -50%;
+
+	display: flex;
+	gap: 2rem;
+
+	@media (width < $tablet) { 
+		bottom: 0;
+		box-sizing: border-box;
+		gap: 1rem;
+		padding: var(--view-pad);
+		width: 100dvw;
+	}
+
+	& > button {
+		border-radius: 5px;
+		font-size: 1.8rem;
+		line-height: 1em;
+		padding: 0.75rem 3rem;
+		@media (width < $tablet) { 
+			flex-basis: 100%; 
+			padding: 0.75rem;
+		}
+	}
+}
+
+@import "game.scss";
+@import "game.scss";
+@import "lobby.scss";
+@import "main-menu.scss";
+@import "ranking.scss";
+@import "tavern.scss";
+@import "topbar.scss";

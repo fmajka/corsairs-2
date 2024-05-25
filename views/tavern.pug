@@ -22,9 +22,9 @@
 						template(x-for="slot in crew.slotsMax - crew.mates.length")
 							.avatar(@click="$store.emit('onCrewJoin', crew.id)")
 
-	.br-buttons
+	.nav-buttons
 		//-button.bg-darkwood.shade-b(@click="$store.router.setView('lobby-crew')")
 		button.bg-darkwood.shade-b(@click="$store.emit('onCrewButton')")
-			span(x-text="$store.user.crew ? 'MOJA ZAŁOGA' : 'STWÓRZ ZAŁOGĘ'")
+			span(x-text="$store.user.crew ? 'ZAŁOGA' : 'STWÓRZ'")
 
 		button.bg-grey.shade-b(@click="$store.router.setView('main-menu')") POWRÓT

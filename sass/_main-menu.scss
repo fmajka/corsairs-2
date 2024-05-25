@@ -1,0 +1,38 @@
+#main-menu {
+	align-items: center;
+	display: flex;
+	flex-direction: column;
+	gap: 2.5rem;
+	padding-top: 2rem;
+	position: relative;
+
+	.pillar {
+		$pillar-width: 1.5rem; 
+
+		position: absolute;
+		width: $pillar-width;
+		height: calc(100% + 7.5rem);
+		left: calc(50% - $pillar-width / 2);
+		top: -5rem;
+	}
+
+	& > .menu-item {
+		width: 18rem;
+		height: 4rem;
+
+		@media (width < $tablet) {
+			width: 14rem;
+			height: 3rem;
+		}
+
+		$item-margin: 4rem;
+
+		&:nth-child(odd) {
+			margin-left: -$item-margin;
+		}
+
+		&:nth-child(even) {
+			margin-left: $item-margin;
+		}
+	}
+}
