@@ -17,12 +17,15 @@ import { socket } from "./io-client.js";
 			}
 		}
 	}
+
+	window.addEventListener("popstate", (event) => {
+		Alpine.store("router").setView(event.state);
+	});
 })();
 
 // Alpine
 document.addEventListener("alpine:init", () => {
 
-	// TODO: no need, just emit onclick
 	Alpine.store("stats", {
 		data: [],
 		lastKey: "",
@@ -73,7 +76,9 @@ document.addEventListener("alpine:init", () => {
 	Alpine.store("router", {
 		view: "main-menu",
 		is(view) { return this.view == view; },
-		setView(view) { 
+		setView(view) {
+			view = view || "main-menu";
+			history.pushState(view, "", view);
 			this.view = view;
 			// Exceptions:
 			if(view === "ranking") {
@@ -94,4 +99,12 @@ document.addEventListener("alpine:init", () => {
 
 	// Emitting socket messages, always prefixed with 'client:'
 	Alpine.store("emit", (msg, data) => socket.emit(`client:${msg}`, data));
+});
+
+document.addEventListener("alpine:initialized", () => { 
+	// Set view to current view on refresh
+	const path = window.location.pathname.split("/")[1];
+	if(path) {
+		Alpine.store("router").setView(path);
+	}
 });

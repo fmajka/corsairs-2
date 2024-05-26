@@ -2,6 +2,7 @@
 	align-items: center;
 	display: flex;
 	flex-direction: column;
+	flex-grow: 0 !important;
 	gap: 2.5rem;
 	padding-top: 2rem;
 	position: relative;

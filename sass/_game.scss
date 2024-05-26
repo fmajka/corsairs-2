@@ -1,12 +1,9 @@
 #game-controls {
 	@media (width >= $desktop) { display: none; }
-	@media (width >= $tablet) { background-color: unset; }
+	position: absolute;
+	bottom: 0;
+	
+	padding: var(--view-pad);
+	width: 100dvw;
 	z-index: 668;
-
-	& > button {
-		font-size: 1.5rem;
-		letter-spacing: 1px;
-		line-height: 1em;
-		flex-basis: 100%;
-	}
 }
