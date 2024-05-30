@@ -1,12 +1,13 @@
 .topbar.bg-wood.shade-b
 
-	.spacer
-
-	button.title.menu-item(x-data @click="$store.router.setView('main-menu')")
-		h1 KORSARZE
-
 	.player-wrapper.bg-cloth.rounded(x-data)
 		#player-avatar.avatar(x-bind:style="`background-image: url(${$store.user.avatar})`")
 		#player-info.info
 			include ./topbar-profile
 			include ./topbar-form
+
+	button.title.menu-item(x-data @click="$store.router.setView('main-menu')")
+		h1 KORSARZE
+
+	.spacer
+

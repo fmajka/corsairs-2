@@ -15,3 +15,4 @@ include mixins/lobby-list-el
 	.nav-buttons
 		button#ready-btn.bg-darkwood.shade-b(onclick="Corsairs.start(true)" onkeyup="event.preventDefault()") GOTOWY!
 		button.bg-grey.shade-b(@click="$store.emit('onCrewLeave')") OPUŚĆ
+		button.bg-grey.shade-b.even.back(@click="$store.router.setView('tavern')")

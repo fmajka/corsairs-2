@@ -33,7 +33,7 @@
 		align-items: stretch;
 		display: flex;
 		width: 18rem;
-		@media (width < $tablet) { margin-left: auto; }
+		@media (width < $tablet) { margin-right: auto; }
 
 		& > .avatar {
 			border: 2px solid var(--cloth);

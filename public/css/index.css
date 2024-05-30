@@ -148,6 +148,7 @@ input {
   display: flex;
   flex-direction: column;
   flex-grow: 1;
+  max-height: 100%;
 }
 
 .menu-item {
@@ -200,6 +201,21 @@ input {
     letter-spacing: 1px;
     padding: 0.75rem;
   }
+}
+.nav-buttons > button.even {
+  aspect-ratio: 1;
+  padding: calc(0.5em + 0.75rem);
+}
+@media (width < 768px) {
+  .nav-buttons > button.even {
+    flex-basis: unset;
+  }
+}
+.nav-buttons > button.even.back {
+  background-image: url("/icons/icon-back-128.png");
+  background-size: 2rem;
+  background-position: 50% calc(50% - 1px);
+  background-repeat: no-repeat;
 }
 
 #game-controls {
@@ -312,10 +328,13 @@ input {
   flex-direction: column;
   gap: 1rem;
   max-width: 40rem;
+  overflow: auto;
+  padding-right: 0.25rem;
 }
 #ranking > .ranking-list .row {
   border-radius: 25px;
   display: grid;
+  flex-shrink: 0;
   gap: 0.75rem;
   grid-template-columns: 4.5rem 5fr 2fr 2fr;
   grid-template-rows: 3rem;
@@ -526,7 +545,7 @@ input {
 }
 @media (width < 768px) {
   .topbar > .player-wrapper {
-    margin-left: auto;
+    margin-right: auto;
   }
 }
 .topbar > .player-wrapper > .avatar {

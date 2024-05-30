@@ -112,6 +112,7 @@ input {
 		display: flex;
 		flex-direction: column;
 		flex-grow: 1;
+		max-height: 100%;
 	}
 }
 
@@ -158,6 +159,19 @@ input {
 			flex-basis: 100%; 
 			letter-spacing: 1px;
 			padding: 0.75rem;
+		}
+
+		&.even {
+			aspect-ratio: 1;
+			padding: calc(0.5em + 0.75rem);
+			@media (width < $tablet) { flex-basis: unset };
+
+			&.back {
+				background-image: url("/icons/icon-back-128.png");
+				background-size: 2rem;
+				background-position: 50% calc(50% - 1px);
+				background-repeat: no-repeat;
+			}
 		}
 	}
 }
