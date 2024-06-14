@@ -8,9 +8,9 @@ import Player from "./corsairs/components/Player.js";
 import { FieldPath } from "firebase-admin/firestore";
 import { refStats } from "./server/firebase-admin.js";
 
-app.get("/", (_, res) => res.render("index"));
-app.get("/:view", (_, res) => res.render("index"));
-
+app.get("/", (_, res) => {
+	res.render("index");
+});
 
 CorsairsServer.init(io)
 	.setOnStart(session => {

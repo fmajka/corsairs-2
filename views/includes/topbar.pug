@@ -4,10 +4,10 @@
 		#player-avatar.avatar(x-bind:style="`background-image: url(${$store.user.avatar})`")
 		#player-info.info
 			include ./topbar-profile
-			include ./topbar-form
 
 	button.title.menu-item(x-data @click="$store.router.setView('main-menu')")
 		h1 KORSARZE
 
 	.spacer
+		button.bg-cloth.rounded.toggle-chat(x-data @click="$store.chat.toggle()")
 

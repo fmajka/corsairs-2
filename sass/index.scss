@@ -48,9 +48,16 @@ $tablet: 768px;
 [x-cloak] { display: none !important; }
 
 body {
-  background: linear-gradient(135deg, #5448C8 15%, #60B2E5 85%);
-  height: 100dvh;
   margin: 0;
+	background: linear-gradient(135deg, #5448C8 15%, #60B2E5 85%);
+	height: 100dvh;
+	overflow: hidden;
+	
+	// & #viewport {
+	// 	background: linear-gradient(135deg, #5448C8 15%, #60B2E5 85%);
+	// 	position: fixed;
+	// 	width: 100%;
+	// }
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -183,3 +190,5 @@ input {
 @import "ranking.scss";
 @import "tavern.scss";
 @import "topbar.scss";
+@import "chat.scss";
+@import "form.scss";

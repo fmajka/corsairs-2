@@ -6,27 +6,30 @@
 	justify-content: space-between;
 	padding: 0.5rem;
 	width: 100%;
-	z-index: 1;
+	z-index: 30;
 
 	& > .spacer {
+		justify-content: end;
+		display: flex;
 		flex-shrink: 1; 
-		width: 18rem;
-		@media (width < $desktop) { display: none; }
-	}
+		@media (width >= $desktop) { width: 18rem; }
+		// @media (width < $desktop) { display: none; }
 
-	& > .title {
-		padding: 0 2.5rem;
-
-		@media (width < $tablet) {
+		& .toggle-chat {
 			aspect-ratio: 1;
 			background-image: url("/icons/icon-anchor.png");
 			background-position: center;
 			background-repeat: no-repeat;
 			background-size: 48px;
+			height: 100%;
 			image-rendering: pixelated;
 			padding: 0;
-			& > h1 { display: none; }
 		}
+	}
+
+	& > .title {
+		padding: 0 2.5rem;
+		@media (width < $desktop) { display: none; }
 	}
 
 	& > .player-wrapper {

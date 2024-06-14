@@ -1,0 +1,12 @@
+dialog#login.auth-form.bg-wood.rounded.shade-b
+	h3 Zaloguj się
+	form.bg-cloth.rounded(x-data @submit.prevent="$store.form.submit()")
+		label
+			span E-mail
+			input(name="email" type="email" x-model="$store.form.email")
+		label
+			span Hasło
+			input(name="password" type="password" x-model="$store.form.password")
+		.buttons
+			button.bg-darkwood.rounded(type="submit") ŻAGLE W GÓRĘ
+			button.bg-grey.rounded(type="button" @click="$store.form.setType(null)") X

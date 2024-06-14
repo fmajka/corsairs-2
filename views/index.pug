@@ -17,13 +17,17 @@ head
 
 	title Korsarze Online 2
 
-body(onkeydown="processHotkey(event.key)")
+//- body(onkeydown="processHotkey(event.key)")
+body()
 	div(id="game-wrapper" style="display: none;")
 		#game-controls.nav-buttons.bg-wood.shade-b
 			button.rounded.shade-b.restart RE:START
 			button.rounded.shade-b.bg-grey.leave KONIEC
 
 	include ./includes/topbar
+	include ./includes/chat
+	include ./includes/form-register
+	include ./includes/form-login
 
 	div#view(x-data)
 		include main-menu

@@ -1,0 +1,6 @@
+#chat-wrapper(x-data="{ open: false, toggle() { this.open = !this.open; $el.style.translate = this.open ? 0 : '' } }")
+	.buttons
+		button.toggle(x-data x-text="open ? 'Ukryj chat' : 'Pokaż chat'" @click="toggle()")
+	form#chat(x-data @submit.prevent @keydown.stop)
+		.messages
+		input.rounded

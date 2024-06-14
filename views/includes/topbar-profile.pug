@@ -1,4 +1,4 @@
-.profile(x-show="!$store.form.type")
+.profile
 	span#player-name(x-text="$store.user.name")
 	.btn-row
 		button.rounded(x-show="$store.user.auth" @click="$store.emit('onUserLogout')") Wyloguj

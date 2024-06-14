@@ -17,15 +17,12 @@ import { socket } from "./io-client.js";
 			}
 		}
 	}
-
-	window.addEventListener("popstate", (event) => {
-		Alpine.store("router").setView(event.state);
-	});
 })();
 
 // Alpine
 document.addEventListener("alpine:init", () => {
 
+	// TODO: no need, just emit onclick
 	Alpine.store("stats", {
 		data: [],
 		lastKey: "",
@@ -50,20 +47,32 @@ document.addEventListener("alpine:init", () => {
 
 	Alpine.store("form", {
 		type: null,
-		label: "",
 		email: "",
+		nick: "",
 		password: "",
+		repassword: "",
 		setType(type) {
+			if(this.type) { document.querySelector(`#${this.type}`)?.close(); }
+			this.reset();
+			if(type) { document.querySelector(`#${type}`)?.showModal(); }
 			this.type = type;
-			this.label = type ? type[0].toUpperCase() : "";
-			if(!type) { this.email = this.password = ""; }
+		},
+		reset() {
+			this.email = this.nick = this.password = this.repassword = "";
 		},
 		submit() {
-			Alpine.store("emit")("onUserSubmit", {
-				type: this.type, 
-				email: this.email, 
+			if(!this.type) { return; }
+			let data = {
+				type: this.type,
+				email: this.email,
 				password: this.password
-			});
+			};
+			if(this.type === "register") {
+				data.nick = this.nick,
+				data.repassword = this.repassword
+			}
+			console.log(data);
+			Alpine.store("emit")("onUserSubmit", data);
 		},
 		onkeydown(event) {
 			if(event.key === "Escape") {
@@ -76,9 +85,7 @@ document.addEventListener("alpine:init", () => {
 	Alpine.store("router", {
 		view: "main-menu",
 		is(view) { return this.view == view; },
-		setView(view) {
-			view = view || "main-menu";
-			history.pushState(view, "", view);
+		setView(view) { 
 			this.view = view;
 			// Exceptions:
 			if(view === "ranking") {
@@ -99,12 +106,4 @@ document.addEventListener("alpine:init", () => {
 
 	// Emitting socket messages, always prefixed with 'client:'
 	Alpine.store("emit", (msg, data) => socket.emit(`client:${msg}`, data));
-});
-
-document.addEventListener("alpine:initialized", () => { 
-	// Set view to current view on refresh
-	const path = window.location.pathname.split("/")[1];
-	if(path) {
-		Alpine.store("router").setView(path);
-	}
 });

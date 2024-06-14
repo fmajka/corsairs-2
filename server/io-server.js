@@ -80,17 +80,20 @@ io.sockets.on('connection', (socket) => {
 		emitViewToSocket("tavern", socket);
 	});
 
-	socket.on("client:onUserSubmit", ({type, email, password}) => {
+	socket.on("client:onUserSubmit", ({type, email, nick, password, repassword}) => {
 		const user = s2u(socket.id);
 		console.log("io-server @onUserSubmit:", email, password);
 
 		if(type === "register") {
+			if(password !== repassword) {
+				console.log(`Passwords didn't match for ${email}!`);
+				return;
+			}
 			createUserWithEmailAndPassword(auth, email, password)
 			.then((cred) => {
 				// Set name to email's first part
-				let displayName = email.split("@")[0];
-				displayName = displayName[0].toUpperCase() + displayName.slice(1);
-				//updateProfile(cred.user, { displayName });
+				const displayName = nick || email.split("@")[0];
+				updateProfile(cred.user, { displayName });
 		
 				// Insert player stats document to firestore
 				refStats.doc(cred.user.uid).set({
