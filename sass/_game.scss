@@ -2,8 +2,6 @@
 	@media (width >= $desktop) { display: none; }
 	position: absolute;
 	bottom: 0;
-	
-	padding: var(--view-pad);
 	width: 100dvw;
 	z-index: 668;
 }

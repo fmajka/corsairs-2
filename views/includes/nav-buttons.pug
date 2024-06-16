@@ -1,0 +1,15 @@
+.nav-buttons(x-cloak x-show="$store.router.is('tavern')")
+	button.bg-darkwood(@click="$store.emit('onCrewButton')" x-text="$store.user.crew ? 'ZAŁOGA' : 'STWÓRZ'")
+	button.bg-grey(@click="$store.router.setView('main-menu')") POWRÓT
+
+.nav-buttons(x-cloak x-show="$store.router.is('ranking')")
+	button.bg-grey(@click="$store.router.setView('main-menu')") POWRÓT
+
+.nav-buttons(x-cloak x-show="$store.router.is('lobby-training')")
+	button#ready-btn.bg-darkwood(onclick="Corsairs.start(false)" onkeyup="event.preventDefault()") TRENING!
+	button.bg-grey(@click="$store.router.setView('main-menu')") POWRÓT
+
+.nav-buttons(x-cloak x-show="$store.router.is('lobby-crew')")
+	button#ready-btn.bg-darkwood(onclick="Corsairs.start(true)" onkeyup="event.preventDefault()") GOTOWY!
+	button.bg-grey(@click="$store.emit('onCrewLeave')") OPUŚĆ
+	button.bg-grey.even.back(@click="$store.router.setView('tavern')")

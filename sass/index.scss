@@ -8,9 +8,13 @@ $tablet: 768px;
 }
 
 :root {
-	--view-pad: 2rem 3rem 1.5rem;
-	@media (width < $desktop) {--view-pad: 2rem 2rem 1.25rem;}
-	@media (width < $tablet) {--view-pad: 1rem; }
+	--view-pad: 2rem 3rem 0;
+	@media (width < $desktop) {--view-pad: 2rem 2rem 0;}
+	@media (width < $tablet) {--view-pad: 1rem 1rem 0; }
+
+	--button-pad: 1.25rem;
+	@media (width < $desktop) {--button-pad: 0.75rem; }
+
 	/**/
 	--amber: #D88B46;
 	--cloth: #FFE99D;
@@ -20,6 +24,7 @@ $tablet: 768px;
 
 	--rounded: 0.25rem;
 	--shade-b: 0px 4px 4px rgba(0, 0, 0, 0.25);
+	--shade-t: 0px -4px 4px rgba(0, 0, 0, 0.25);
 
 	--topbar-height: 5rem;
 
@@ -101,28 +106,13 @@ input {
 .rounded { border-radius: var(--rounded); }
 
 .shade-b { box-shadow: var(--shade-b); }
+.shade-t { box-shadow: var(--shade-t); }
 
 .mobile {
 	@media (width >= $tablet) { display: none; }
 }
 
 /* Common */
-#view {
-	box-sizing: border-box;
-	display: flex;
-	flex-direction: column;
-	height: calc(100% - var(--topbar-height));
-	overflow-y: auto;
-	padding: var(--view-pad);
-
-	& > div {
-		display: flex;
-		flex-direction: column;
-		flex-grow: 1;
-		max-height: 100%;
-	}
-}
-
 .menu-item {
 	@include flex-center;
 
@@ -144,21 +134,46 @@ input {
 	& > .list-element { display: flex; }
 }
 
-/* BOTTOM-RIGHT BUTTONS */
+/* VIEW */
+#view {
+	box-sizing: border-box;
+	display: flex;
+	flex-direction: column;
+	height: calc(100% - var(--topbar-height));
+
+	#view-content {
+		display: flex;
+		flex-direction: column;
+		flex-grow: 1;
+		max-height: 100%;
+		overflow: hidden;
+		padding: var(--view-pad);
+		@media (width < $desktop) {
+			position: relative;
+		}
+	}
+}
+
 .nav-buttons {
 	display: flex;
 	gap: 2rem;
 	justify-content: center;
-	margin-top: auto;
+	padding: var(--button-pad);
+	z-index: 10;
+
+	@media (width < $desktop) { 
+		background-color: var(--wood);
+		box-shadow: var(--shade-t);
+	}
 
 	@media (width < $tablet) { 
 		box-sizing: border-box;
 		gap: 1rem;
-		padding-top: 1rem;
 	}
 
 	& > button {
-		border-radius: 5px;
+		border-radius: var(--rounded);
+		box-shadow: var(--shade-b);
 		font-size: 1.6rem;
 		line-height: 1em;
 		padding: 0.75rem 3rem;
@@ -182,6 +197,7 @@ input {
 		}
 	}
 }
+
 
 @import "game.scss";
 @import "game.scss";

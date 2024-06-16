@@ -25,16 +25,22 @@ body()
 			button.rounded.shade-b.bg-grey.leave KONIEC
 
 	include ./includes/topbar
-	include ./includes/chat
 	include ./includes/form-register
 	include ./includes/form-login
 
-	div#view(x-data)
-		include main-menu
-		include tavern
-		include lobby-crew
-		include lobby-training
-		include ranking
+	#view(x-data)
+		#view-content
+			include ./includes/chat
+			//- views
+			include main-menu
+			include tavern
+			include lobby-crew
+			include lobby-training
+			include ranking
+
+		#nav-buttons
+			include ./includes/nav-buttons
+
 
 <!-- Start game script -->
 script(type="module").

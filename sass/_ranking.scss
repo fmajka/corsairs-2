@@ -1,8 +1,11 @@
 #ranking {
+	height: 100%;
+	
 	& > .ranking-list {
 		display: flex;
 		flex-direction: column;
 		gap: 1rem;
+		max-height: 100%;
 		max-width: 40rem;
 		overflow: auto;
 		padding-right: 0.25rem;

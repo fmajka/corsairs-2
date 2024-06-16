@@ -1,5 +1,4 @@
 #tavern(x-cloak x-show="$store.router.is($el.id)")
-	<!-- hx-target, hx-swap & hx-vals updated dynamically via websockets -->
 	.list.tavern-list
 		| Crew list
 		template(x-for="crew in $store.crews")
@@ -22,9 +21,3 @@
 						template(x-for="slot in crew.slotsMax - crew.mates.length")
 							.avatar(@click="$store.emit('onCrewJoin', crew.id)")
 
-	.nav-buttons
-		//-button.bg-darkwood.shade-b(@click="$store.router.setView('lobby-crew')")
-		button.bg-darkwood.shade-b(@click="$store.emit('onCrewButton')")
-			span(x-text="$store.user.crew ? 'ZAŁOGA' : 'STWÓRZ'")
-
-		button.bg-grey.shade-b(@click="$store.router.setView('main-menu')") POWRÓT
