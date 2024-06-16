@@ -22,7 +22,15 @@ import { socket } from "./io-client.js";
 // Alpine
 document.addEventListener("alpine:init", () => {
 
-	// TODO: no need, just emit onclick
+	Alpine.store("chat", {
+		messages: [],
+		submit(event) {
+			const input = event.target['message'];
+			Alpine.store("emit")('onChatMsg', input.value);
+			input.value = "";
+		},
+	});
+
 	Alpine.store("stats", {
 		data: [],
 		lastKey: "",

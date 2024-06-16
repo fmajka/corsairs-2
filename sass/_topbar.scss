@@ -13,9 +13,8 @@
 		display: flex;
 		flex-shrink: 1; 
 		@media (width >= $desktop) { width: 18rem; }
-		// @media (width < $desktop) { display: none; }
 
-		& .toggle-chat {
+		& > button {
 			aspect-ratio: 1;
 			background-image: url("/icons/icon-anchor.png");
 			background-position: center;
@@ -24,6 +23,7 @@
 			height: 100%;
 			image-rendering: pixelated;
 			padding: 0;
+			@media(width >= $desktop) { display: none; }
 		}
 	}
 

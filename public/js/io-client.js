@@ -66,7 +66,13 @@ socket.on("view-change", (view) => {
 
 socket.on("stats-change", (stats) => {
 	Alpine.store("stats").data = stats;
-})
+});
+
+socket.on("chat-msg", (msgData) => {
+  const messages = document.querySelector("#chat .messages");
+  Alpine.store("chat").messages.push(msgData);
+  Alpine.nextTick(() => messages.scrollTop = messages.scrollHeight);
+});
 
 // Game updates
 socket.on("corsairs-run", ({gameType}) => {

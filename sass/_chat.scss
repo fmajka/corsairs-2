@@ -32,24 +32,26 @@ $chat-height: 12rem;
 	}
 
 	#chat {
-		background-color: #00000060;
+		background-color: #00000088;
 		border-radius: 5px 5px 0 5px;
 		box-sizing: border-box;
 		display: flex;
 		flex-direction: column;
 		font-size: 0.8rem;
+		@media (width < $tablet) { font-size: 0.9rem; }
 		padding: 0.5rem;
 		@media (width < $desktop) { 
 			background-color: #000000AA;
 			padding: 0.5rem 1rem; 
 		}
-
 		height: $chat-height;
 		width: 100%;
 
 		.messages {
 			color: var(--cloth);
 			flex-grow: 1;
+			overflow: auto;
+			word-break: break-word;
 		}
 	
 		input {

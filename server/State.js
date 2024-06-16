@@ -21,38 +21,13 @@ const arrRemoveItem = (arr, item) => {
 }
 
 /** 
- * Gets User object from 'socketMap' Map based on given parameter
- * @param {Socket|cookie<string>} from - Supported object containing user's socketId
+ * Get user from socketId
+ * @param {string} socketId - The user's socketId
  * @returns {User} User data object
  * */
-function getUser(from) {
-	// Get socketId from cookie
-	if (typeof from === "string") {
-		// TODO: make it more robust
-		from = cookie.split("=").slice(1).join("=");
-	}
-	return socketMap.get(from);
-}
-
-// Get player from socketId
 function s2u(socketId) {
 	return socketMap.get(socketId);
 }
-
-// TODO: remove
-// function c2u(cookieStr) {
-// 	// TODO: what if no cookie?
-// 	const cookies = cookieStr.split(";");
-// 	// Find the right cookie
-// 	for(const cookie of cookies) {
-// 		const parts = cookie.trim().split("=");
-// 		if(parts[0] == "id") {
-// 			const socketId = parts.slice(1).join("=");
-// 			return s2u(socketId);
-// 		}
-// 	}
-// 	return null;
-// }
 
 function createUser(socket, name) {
 	const player = new User(socket, name);

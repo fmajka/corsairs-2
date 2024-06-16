@@ -126,7 +126,7 @@ io.sockets.on('connection', (socket) => {
 
 	});
 
-	socket.on("client:onUserLogout", _ => {
+	socket.on("client:onUserLogout", () => {
 		const user = s2u(socket.id);
 		user.name = getRandomName();
 		user.uid = null;
@@ -137,7 +137,12 @@ io.sockets.on('connection', (socket) => {
 		const stats = (await getStats()).sort((a, b) => b.highscore - a.highscore);
 		console.log(stats);
 		io.to(socket.id).emit("stats-change", stats);
-	})
+	});
+
+	socket.on("client:onChatMsg", async (text) => {
+		const user = s2u(socket.id);
+		io.emit("chat-msg", {from: user.name, text}); 
+	});
 
 	//////////////
 	// Corsairs //
