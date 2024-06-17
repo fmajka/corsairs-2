@@ -2,6 +2,7 @@ import Corsairs from "../Corsairs.js";
 import InputManager from "../managers/InputManager.js";
 
 export default class RenderSystem {
+	static SPRITE_SCALE = 3;
 
 	static draw(session) {
 		let ctx = Corsairs.ctx;
@@ -14,28 +15,28 @@ export default class RenderSystem {
 		}
 
 		for(let [id, entity] of session.entities.entries()) {
-			let sprite = entity.sprite;
-			let image = sprite.image;
-			let x = image.width  * sprite.anchor.x;
-			let y = image.height * sprite.anchor.y;
-			let tx = entity.pos.x;
-			let ty = entity.pos.y;
+			const sprite = entity.sprite;
+			const image = sprite.image;
+			const width = image.width;
+			const height = image.height;
+			const ax = image.width  * sprite.anchor.x;
+			const ay = image.height * sprite.anchor.y;
+			const tx = entity.pos.x;
+			const ty = entity.pos.y;
+			const scale = this.SPRITE_SCALE;
 
-		    ctx.save();
+			ctx.save();
 
+			ctx.translate(tx, ty);
+			ctx.rotate(entity.angle);
+			ctx.drawImage(image, -ax * scale, -ay * scale, width * scale, height * scale);
 
-		    ctx.translate(tx, ty);
-		    ctx.rotate(entity.angle);
-		    
-		    ctx.drawImage(image, -x, -y);
-
-		    ctx.restore(); 
-		    
-		    
-		    // let c = entity.collider;
-		    // let p = entity.pos;
-		    // ctx.fillStyle = "red";
-		    // ctx.fillRect(p.x + c.x - c.w, p.y + c.y - c.h, 2*c.w, 2*c.h);
+			ctx.restore(); 
+			
+			// let c = entity.collider;
+			// let p = entity.pos;
+			// ctx.fillStyle = "red";
+			// ctx.fillRect(p.x + c.x - c.w, p.y + c.y - c.h, 2*c.w, 2*c.h);
 		}
 
 		ctx.restore();

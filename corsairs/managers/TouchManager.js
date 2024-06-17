@@ -50,10 +50,13 @@ export default class TouchManager {
 	
 	static start(event) {
 		const touch = event.changedTouches[0];
-		const pos = this.getGameCoords(touch.clientX, touch.clientY);
-
+		console.log(touch.target)
+		// Only register if touches canvas or overlay
+		if(touch.target !== Corsairs.overlay && touch.target !== Corsairs.ctx.canvas) { return; }
 		// Only register touches on the lower half
 		if(touch.clientY < window.innerHeight / 2) { return; }
+
+		const pos = this.getGameCoords(touch.clientX, touch.clientY);
 
 		// Movement
 		if(touch.clientX < window.innerWidth / 2) {

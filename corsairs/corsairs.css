@@ -22,7 +22,27 @@
   z-index: 666;
 }
 
-@media screen and (max-width: 767px) {
+#game-wrapper .joystick,
+#game-wrapper .joystick > div {
+  aspect-ratio: 1 / 1;
+  background-size: 100%;
+  image-rendering: pixelated;
+  position: absolute;
+  z-index: 668;
+}
+#game-wrapper .joystick {
+  background-image: url("/corsairs/gfx/ui/joystick-bottom.png");
+  pointer-events: none;
+  translate: -50% -50%;
+  width: 192px;
+}
+#game-wrapper .joystick > div {
+  background-image: url("/corsairs/gfx/ui/joystick-top.png");
+  translate: 50% 50%;
+  width: 96px;
+}
+
+@media screen and (max-width: 1024px) {
 	#game-wrapper {
 		flex-direction: column;
 		justify-content: start;

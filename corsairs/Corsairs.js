@@ -24,6 +24,7 @@ import Input from "./enums/Input.js";
 
 export default class Corsairs {
 	static wrapper = null;
+	static overlay = null;
 	static ctx = null;
 	static ctxScale = 1;
 	static ctxRotated = false;
@@ -57,8 +58,8 @@ export default class Corsairs {
 	// Attach game-related elements to a wrapper & initialize stuff...
 	static async mount(wrapperQuery) {
 		this.wrapper = document.querySelector(wrapperQuery);
-		let canvas = document.createElement("canvas");
-		let overlay = document.createElement("div");
+		const canvas = document.createElement("canvas");
+		const overlay = this.overlay = document.createElement("div");
 		
 		overlay.classList.add("game-overlay");
 
@@ -284,7 +285,7 @@ function resizeCanvas(event) {
 	ctx.canvas.width = width;
 	ctx.canvas.height = height;
 	ctx.scale(scale, scale);
-	ctx.setImageSmoothingEnabled = false;
+	ctx.imageSmoothingEnabled = false;
 	console.log(width, height, scale);
 }
 
